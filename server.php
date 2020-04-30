@@ -39,10 +39,10 @@ $ws_worker->onConnect = function ($connection) use (&$users) {
         $data1 = [];
         foreach ($users as $user) {
             $data1[] = [
-                "Coordinates" => $user->getCoordinates(),
-                "Color" => $user->getColor(),
-                "Hp" => $user->getHp(),
-                "Exp" => $user->getExp()];
+                "coordinates" => $user->getCoordinates(),
+                "color" => $user->getColor(),
+                "hp" => $user->getHp(),
+                "exp" => $user->getExp()];
         }
 
         foreach ($users as $user) {

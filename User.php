@@ -8,9 +8,9 @@ class User
     private $connection;
     private $coordinates = [];
     private $color = [
-        "R" => 0,
-        "G" => 0,
-        "B" => 0,
+        "r" => 0,
+        "g" => 0,
+        "b" => 0,
     ];
     private $hp;
     private $exp;
@@ -19,9 +19,9 @@ class User
     {
         $this->connection=$connection;
         $this->coordinates=[rand(0,1000), rand(0,1000)];
-        $this->color["R"]=rand(0,255);
-        $this->color["G"]=rand(0,255);
-        $this->color["B"]=rand(0,255);
+        $this->color["r"]=rand(0,255);
+        $this->color["g"]=rand(0,255);
+        $this->color["b"]=rand(0,255);
         $this->hp=100;
         $this->exp=0;
     }

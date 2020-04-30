@@ -5,30 +5,37 @@
     <script>
         let users = [];
         let ws;
+        let canvas;
         function openWS(){
-            ws = new WebSocket("ws://0.0.0.0:8000?user=" + $('#nick').val());
+            ws = new WebSocket("ws://192.168.1.40:8000?user=" + $('#nick').val());
+            $('#main_block').show();
+            $('#login_form').hide();
+            canvas =  document.getElementById('canvas');
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
                 if(data.type === "message"){
                     $('#div').append("<div style='border: 1px solid red'>author: " + data.author + "<br>message: " + data.data + "</div>");
                 }
-                else{
+                else if(data.type === "users"){
                     users = data.data;
-                    $('#select').html("");
-                    users.forEach(item => {
-                        $('#select').append("<option>"+item+"</option>")
-                    });
+                    for (let i=0; i< users.length; i++){
+                        let ctx = canvas.getContext('2d');
+                        ctx.fillStyle = "rgb(" +
+                            users[i].color["r"] + ", " +
+                            users[i].color["g"] + ", " +
+                            users[i].color["b"] +
+                            ")";
+                        ctx.fillRect(users[i].coordinates[0], users[i].coordinates[1], 50, 50);
+                    }
                     console.log(users);
                 }
             };
-            $('#main_block').show();
-            $('#login_form').hide();
         }
-        function sendMessage() {
-            let text = $('#textarea').val();
-            ws.send(JSON.stringify({"user": $('#select').val(), "text": text}));
-            console.log(text)
-        }
+        // function sendMessage() {
+        //     let text = $('#textarea').val();
+        //     ws.send(JSON.stringify({"user": $('#select').val(), "text": text}));
+        //     console.log(text)
+        // }
 
         $(document).ready(function () {
             // $('#textarea').on("input", sendMessage);
@@ -45,12 +52,7 @@
     <button id="connect" onclick="openWS()">connect</button>
 </div>
 <div id="main_block" style="display: none">
-    <label>Введи текст
-        <textarea id="textarea"></textarea>
-        <select id="select"></select>
-        <button onclick="sendMessage()">send</button>
-    </label>
-    <div id="div"></div>
+    <canvas id="canvas" width="1000" height="1000"></canvas>
 </div>
 </body>
 </html>
