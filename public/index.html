@@ -6,39 +6,58 @@
         let users = [];
         let ws;
         let canvas;
-        function openWS(){
+
+        let timerId;
+        let throttleFunction = function (func, delay, arg) {
+            // If setTimeout is already scheduled, no need to do anything
+            if (timerId) {
+                return
+            }
+
+            // Schedule a setTimeout after delay seconds
+            timerId = setTimeout(function () {
+                func(arg);
+
+                // Once setTimeout function execution is finished, timerId = undefined so that in <br>
+                // the next scroll event function execution can be scheduled by the setTimeout
+                timerId = undefined;
+            }, delay)
+        };
+
+        function move (event) {
+            const keyName = event.key;
+            let vertical = 0;
+            let horizontal = 0;
+            if (keyName === "w") {
+                vertical = -1;
+            }
+            if (keyName === "s") {
+                vertical = 1;
+            }
+            if (keyName === "d") {
+                horizontal = 1;
+            }
+            if (keyName === "a") {
+                horizontal = -1;
+            }
+            ws.send(JSON.stringify({type: "move", data: {horizontal: horizontal, vertical: vertical}}));
+        }
+
+        function openWS() {
             ws = new WebSocket("ws://192.168.1.40:8000?user=" + $('#nick').val());
             $('#main_block').show();
             $('#login_form').hide();
-            canvas =  document.getElementById('canvas');
-            document.addEventListener('keypress', function (event) {
-                const keyName = event.key;
-                let vertical = 0;
-                let horizontal = 0;
-                if (keyName === "w"){
-                    vertical = -1;
-                }
-                if (keyName === "s"){
-                    vertical = 1;
-                }
-                if (keyName === "d"){
-                    horizontal = 1;
-                }
-                if (keyName === "a"){
-                    horizontal = -1;
-                }
-                ws.send(JSON.stringify({type:"move", data:{horizontal:horizontal, vertical: vertical}}));
-            });
+            canvas = document.getElementById('canvas');
+            document.addEventListener('keypress', (event)=>{throttleFunction(move, 50, event)});
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
-                if(data.type === "message"){
+                if (data.type === "message") {
                     $('#div').append("<div style='border: 1px solid red'>author: " + data.author + "<br>message: " + data.data + "</div>");
-                }
-                else if(data.type === "users"){
+                } else if (data.type === "users") {
                     users = data.data;
                     let ctx = canvas.getContext('2d');
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    for (let i=0; i< users.length; i++){
+                    for (let i = 0; i < users.length; i++) {
                         ctx.fillStyle = "rgb(" +
                             users[i].color.r + ", " +
                             users[i].color.g + ", " +
@@ -54,14 +73,8 @@
                 }
             };
         }
-        // function sendMessage() {
-        //     let text = $('#textarea').val();
-        //     ws.send(JSON.stringify({"user": $('#select').val(), "text": text}));
-        //     console.log(text)
-        // }
 
         $(document).ready(function () {
-            // $('#textarea').on("input", sendMessage);
         });
     </script>
     <meta charset="UTF-8">
