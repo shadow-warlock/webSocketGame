@@ -6,7 +6,7 @@
         let users = [];
         let ws;
         function openWS(){
-            ws = new WebSocket("ws://192.168.0.184:8000?user=" + $('#nick').val());
+            ws = new WebSocket("ws://0.0.0.0:8000?user=" + $('#nick').val());
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
                 if(data.type === "message"){
@@ -21,9 +21,8 @@
                     console.log(users);
                 }
             };
-            $('#input-block').show();
-            $('#nick').attr("disabled", true);
-            $('#connect').attr("disabled", true);
+            $('#main_block').show();
+            $('#login_form').hide();
         }
         function sendMessage() {
             let text = $('#textarea').val();
@@ -39,18 +38,19 @@
     <title>socket</title>
 </head>
 <body>
-<label>Введи никнейм
-    <input id="nick"/>
-</label>
-<button id="connect" onclick="openWS()">connect</button>
-<br>
-<br>
-<br>
-<label id="input-block" style="display: none">Введи текст
-    <textarea id="textarea"></textarea>
-    <select id="select"></select>
-    <button onclick="sendMessage()">send</button>
-</label>
-<div id="div"></div>
+<div id="login_form">
+    <label>Введи никнейм
+        <input id="nick"/>
+    </label>
+    <button id="connect" onclick="openWS()">connect</button>
+</div>
+<div id="main_block" style="display: none">
+    <label>Введи текст
+        <textarea id="textarea"></textarea>
+        <select id="select"></select>
+        <button onclick="sendMessage()">send</button>
+    </label>
+    <div id="div"></div>
+</div>
 </body>
 </html>
