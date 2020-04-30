@@ -36,9 +36,9 @@
                 }
                 else if(data.type === "users"){
                     users = data.data;
+                    let ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
                     for (let i=0; i< users.length; i++){
-                        let ctx = canvas.getContext('2d');
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
                         ctx.fillStyle = "rgb(" +
                             users[i].color.r + ", " +
                             users[i].color.g + ", " +

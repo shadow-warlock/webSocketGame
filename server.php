@@ -52,7 +52,7 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
 
 $ws_worker->onConnect = function ($connection) use (&$users) {
     $connection->onWebSocketConnect = function ($connection) use (&$users) {
-        $users[$_GET['user']] = new User($connection, $_GET['user']);
+        $users[] = new User($connection, $_GET['user']);
         $data1 = [];
         foreach ($users as $user) {
             $data1[] = [
