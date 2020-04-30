@@ -6,6 +6,7 @@ namespace WebSocketGame;
 class User
 {
     private $connection;
+    private $login;
     private $coordinates = [
         "x" => 0,
         "y" => 0,
@@ -21,6 +22,7 @@ class User
     public function __construct($connection)
     {
         $this->connection=$connection;
+        $this->login=$_GET["name"];
         $this->coordinates["x"]=rand(0,1000);
         $this->coordinates["y"]=rand(0,1000);
         $this->color["r"]=rand(0,255);
