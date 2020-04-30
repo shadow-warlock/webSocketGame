@@ -8,7 +8,7 @@ class User
     private $connection;
     private $coordinates = [];
     private $color = [
-        "R"  => 0,
+        "R" => 0,
         "G" => 0,
         "B" => 0,
     ];
@@ -38,12 +38,13 @@ class User
     {
         return $this->color;
     }
-    public function getHp(): array
+    public function getHp(): int
     {
         return $this->hp;
     }
-    public function getExp(): array
+    public function getExp(): int
     {
         return $this->exp;
     }
+
 }
