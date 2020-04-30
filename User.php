@@ -13,6 +13,22 @@ class User
         "B" => 0,
     ];
 
+    /**
+     * @return mixed
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
+     * @param mixed $connection
+     */
+    public function setConnection($connection): void
+    {
+        $this->connection = $connection;
+    }
+
     public function __construct($connection)
     {
         $this->connection=$connection;
