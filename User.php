@@ -7,7 +7,10 @@ class User
 {
     private $connection;
     private $login;
-    private $coordinates = [];
+    private $coordinates = [
+        "x" => 0,
+        "y" => 0,
+    ];
     private $color = [
         "r" => 0,
         "g" => 0,
@@ -20,7 +23,8 @@ class User
     {
         $this->connection=$connection;
         $this->login=$_GET["name"];
-        $this->coordinates=[rand(0,1000), rand(0,1000)];
+        $this->coordinates["x"]=rand(0,1000);
+        $this->coordinates["y"]=rand(0,1000);
         $this->color["r"]=rand(0,255);
         $this->color["g"]=rand(0,255);
         $this->color["b"]=rand(0,255);
@@ -48,9 +52,10 @@ class User
     {
         return $this->exp;
     }
-    public function setCoordinates(array $coordinates): void
+    public function move($x,$y): void
     {
-        $this->coordinates = $coordinates;
+        $this->coordinates["x"] = $this->coordinates["x"]+$x;
+        $this->coordinates["y"] = $this->coordinates["y"]+$y;
     }
 
 }

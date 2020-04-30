@@ -31,7 +31,7 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
     if ($data["type"]==="move") {
         foreach ($users as $user) {
             if ($user->getConnection() === $connection) {
-                $user->setCoordinates([$data["data"]["horizontal"]*5,$data["data"]["vertical"]*5]);
+                $user->move($data["data"]["horizontal"]*5,$data["data"]["vertical"]*5);
             }
         }
         foreach ($users as $user) {
@@ -72,8 +72,8 @@ $ws_worker->onClose = function ($connection) use (&$users) {
     $user = array_search($connection, $users);
     unset($users[$user]);
     $data = ["type" => "users", "data" => array_keys($users)];
-    foreach ($users as $connection) {
-        $connection->send(json_encode($data));
+    foreach ($users as $user) {
+        $user->getConnection()->send(json_encode($data));
     }
 };
 
