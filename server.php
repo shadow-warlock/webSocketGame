@@ -26,11 +26,25 @@ $ws_worker->onWorkerStart = function () use (&$users) {
 
 $ws_worker->onMessage = function ($connection, $data) use (&$users) {
     $data = json_decode($data, true);
-    $user = array_search($connection, $users);
-    $connection2 = $users[$data['user']];
-    $connection2->send(json_encode(["type" => "message", "author" => $user, "data" => $data['text']]));
-    $connection->send(json_encode(["type" => "message", "author" => $user, "data" => $data['text']]));
+    if ($data["type"]==="move") {
+        foreach ($users as $user) {
+            if ($user->getConnection() === $connection) {
+                $user->setCoordinates([$data["data"]["horizontal"]*5],[$data["data"]["vertical"]*5]);
+            }
+        }
+        foreach ($users as $user) {
+            $data1[] = [
+                "coordinates" => $user->getCoordinates(),
+                "color" => $user->getColor(),
+                "hp" => $user->getHp(),
+                "exp" => $user->getExp()];
+        }
 
+        foreach ($users as $user) {
+            $data = ["type" => "users", "data" => $data1];
+            $user->getConnection()->send(json_encode($data));
+        }
+    }
 };
 
 $ws_worker->onConnect = function ($connection) use (&$users) {

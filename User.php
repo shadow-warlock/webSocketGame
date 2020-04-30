@@ -46,5 +46,9 @@ class User
     {
         return $this->exp;
     }
+    public function setCoordinates(array $coordinates): void
+    {
+        $this->coordinates = $coordinates;
+    }
 
 }
