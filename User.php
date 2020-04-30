@@ -13,6 +13,22 @@ class User
         "B" => 0,
     ];
 
+    /**
+     * @return int[]
+     */
+    public function getColor(): array
+    {
+        return $this->color;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCoordinates(): array
+    {
+        return $this->coordinates;
+    }
+
     public function __construct($connection)
     {
         $this->connection=$connection;
