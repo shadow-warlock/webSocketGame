@@ -3,10 +3,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/User.php';
 use Workerman\Worker;
 
-$connections = [];
+$users = [];
 
 $ws_worker = new Worker("websocket://0.0.0.0:8000");
-$ws_worker->onWorkerStart = function() use (&$connections)
+$ws_worker->onWorkerStart = function() use (&$users)
 {
 //    // создаём локальный tcp-сервер, чтобы отправлять на него сообщения из кода нашего сайта
 //    $inner_tcp_worker = new Worker("tcp://127.0.0.1:1234");
@@ -23,34 +23,35 @@ $ws_worker->onWorkerStart = function() use (&$connections)
 //    $inner_tcp_worker->listen();
 };
 
-$ws_worker->onMessage = function($connection, $data) use (&$connections){
+$ws_worker->onMessage = function($connection, $data) use (&$users){
     $data = json_decode($data, true);
-    $user = array_search($connection, $connections);
-    $connection2 = $connections[$data['user']];
+    $user = array_search($connection, $users);
+    $connection2 = $users[$data['user']];
     $connection2->send(json_encode(["type"=>"message", "author"=>$user, "data" => $data['text']]));
     $connection->send(json_encode(["type"=>"message", "author"=>$user, "data" => $data['text']]));
 
 };
 
-$ws_worker->onConnect = function($connection) use (&$connections)
+$ws_worker->onConnect = function($connection) use (&$users)
 {
-    $connection->onWebSocketConnect = function($connection) use (&$connections)
+    $connection->onWebSocketConnect = function($connection) use (&$users)
     {
-        $connections[$_GET['user']] = $connection;
-        $data = ["type" => "users", "data" => array_keys($connections)];
-        foreach($connections as $connection){
+        $users[$_GET['user']] = User($connection);
+        print_r($users);
+        $data = ["type" => "users", "data" => array_keys($users)];
+        foreach($users as $connection){
             $connection->send(json_encode($data));
         }
     };
 };
 
-$ws_worker->onClose = function($connection) use(&$connections)
+$ws_worker->onClose = function($connection) use(&$users)
 {
     // удаляем параметр при отключении пользователя
-    $user = array_search($connection, $connections);
-    unset($connections[$user]);
-    $data = ["type" => "users", "data" => array_keys($connections)];
-    foreach($connections as $connection){
+    $user = array_search($connection, $users);
+    unset($users[$user]);
+    $data = ["type" => "users", "data" => array_keys($users)];
+    foreach($users as $connection){
         $connection->send(json_encode($data));
     }
 };
