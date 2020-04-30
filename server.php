@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/User.php';
+
+use WebSocketGame\User;
 use Workerman\Worker;
 
 $users = [];
@@ -36,11 +38,11 @@ $ws_worker->onConnect = function($connection) use (&$users)
 {
     $connection->onWebSocketConnect = function($connection) use (&$users)
     {
-        $users[$_GET['user']] = User($connection);
+        $users[$_GET['user']] = new User($connection);
         print_r($users);
         $data = ["type" => "users", "data" => array_keys($users)];
-        foreach($users as $connection){
-            $connection->send(json_encode($data));
+        foreach($users as $user){
+            $user->getConnection()->send(json_encode($data));
         }
     };
 };

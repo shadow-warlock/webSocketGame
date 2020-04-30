@@ -13,22 +13,6 @@ class User
         "B" => 0,
     ];
 
-    /**
-     * @return mixed
-     */
-    public function getConnection()
-    {
-        return $this->connection;
-    }
-
-    /**
-     * @param mixed $connection
-     */
-    public function setConnection($connection): void
-    {
-        $this->connection = $connection;
-    }
-
     public function __construct($connection)
     {
         $this->connection=$connection;
@@ -36,5 +20,10 @@ class User
         $this->color["R"]=rand(0,255);
         $this->color["G"]=rand(0,255);
         $this->color["B"]=rand(0,255);
-}
+    }
+
+    public function getConnection()
+    {
+        return $this->connection;
+    }
 }
