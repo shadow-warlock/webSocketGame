@@ -39,9 +39,8 @@ $ws_worker->onConnect = function($connection) use (&$users)
     $connection->onWebSocketConnect = function($connection) use (&$users)
     {
         $users[$_GET['user']] = new User($connection);
-        print_r($users);
-        $data = ["type" => "users", "data" => array_keys($users)];
         foreach($users as $user){
+            $data = ["type" => "users", "data" => [$user->getCoordinates(),$user->getColor(),$user->getHp(),$user->getExp()]];
             $user->getConnection()->send(json_encode($data));
         }
     };
