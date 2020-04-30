@@ -31,7 +31,7 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
     if ($data["type"]==="move") {
         foreach ($users as $user) {
             if ($user->getConnection() === $connection) {
-                $user->setCoordinates([$data["data"]["horizontal"]*5,$data["data"]["vertical"]*5]);
+                $user->move($data["data"]["horizontal"]*5,$data["data"]["vertical"]*5);
             }
         }
         foreach ($users as $user) {
