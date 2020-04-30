@@ -24,6 +24,8 @@ $ws_worker->onWorkerStart = function () use (&$users) {
 //    $inner_tcp_worker->listen();
 };
 
+
+
 $ws_worker->onMessage = function ($connection, $data) use (&$users) {
     $data = json_decode($data, true);
     if ($data["type"]==="move") {

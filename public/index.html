@@ -11,6 +11,24 @@
             $('#main_block').show();
             $('#login_form').hide();
             canvas =  document.getElementById('canvas');
+            document.addEventListener('keypress', function (event) {
+                const keyName = event.key;
+                let vertical = 0;
+                let horizontal = 0;
+                if (keyName === "w"){
+                    vertical = 1;
+                }
+                if (keyName === "s"){
+                    vertical = -1;
+                }
+                if (keyName === "d"){
+                    horizontal = 1;
+                }
+                if (keyName === "a"){
+                    horizontal = -1;
+                }
+                ws.send(JSON.stringify({"type":"move", "data":{"horizontal":horizontal, "vertical": vertical}}));
+            });
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
                 if(data.type === "message"){
