@@ -6,7 +6,7 @@
         let users = [];
         let ws;
         function openWS(){
-            ws = new WebSocket("ws://0.0.0.0:8000?user=" + $('#nick').val());
+            ws = new WebSocket("ws://192.168.1.40:8000?user=" + $('#nick').val());
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
                 if(data.type === "message"){
