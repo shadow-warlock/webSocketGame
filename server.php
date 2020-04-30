@@ -72,8 +72,8 @@ $ws_worker->onClose = function ($connection) use (&$users) {
     $user = array_search($connection, $users);
     unset($users[$user]);
     $data = ["type" => "users", "data" => array_keys($users)];
-    foreach ($users as $connection) {
-        $connection->send(json_encode($data));
+    foreach ($users as $user) {
+        $user->getConnection()->send(json_encode($data));
     }
 };
 
