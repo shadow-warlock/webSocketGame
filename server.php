@@ -8,8 +8,7 @@ use Workerman\Worker;
 $users = [];
 
 $ws_worker = new Worker("websocket://0.0.0.0:8000");
-$ws_worker->onWorkerStart = function() use (&$users)
-{
+$ws_worker->onWorkerStart = function () use (&$users) {
 //    // создаём локальный tcp-сервер, чтобы отправлять на него сообщения из кода нашего сайта
 //    $inner_tcp_worker = new Worker("tcp://127.0.0.1:1234");
 //    // создаём обработчик сообщений, который будет срабатывать,
@@ -25,34 +24,40 @@ $ws_worker->onWorkerStart = function() use (&$users)
 //    $inner_tcp_worker->listen();
 };
 
-$ws_worker->onMessage = function($connection, $data) use (&$users){
+$ws_worker->onMessage = function ($connection, $data) use (&$users) {
     $data = json_decode($data, true);
     $user = array_search($connection, $users);
     $connection2 = $users[$data['user']];
-    $connection2->send(json_encode(["type"=>"message", "author"=>$user, "data" => $data['text']]));
-    $connection->send(json_encode(["type"=>"message", "author"=>$user, "data" => $data['text']]));
+    $connection2->send(json_encode(["type" => "message", "author" => $user, "data" => $data['text']]));
+    $connection->send(json_encode(["type" => "message", "author" => $user, "data" => $data['text']]));
 
 };
 
-$ws_worker->onConnect = function($connection) use (&$users)
-{
-    $connection->onWebSocketConnect = function($connection) use (&$users)
-    {
+$ws_worker->onConnect = function ($connection) use (&$users) {
+    $connection->onWebSocketConnect = function ($connection) use (&$users) {
         $users[$_GET['user']] = new User($connection);
-        foreach($users as $user){
-            $data = ["type" => "users", "data" => [$user->getCoordinates(),$user->getColor(),$user->getHp(),$user->getExp()]];
+        $data1 = [];
+        foreach ($users as $user) {
+            $data1[] = [
+                "Coordinates" => $user->getCoordinates(),
+                "Color" => $user->getColor(),
+                "Hp" => $user->getHp(),
+                "Exp" => $user->getExp()];
+        }
+
+        foreach ($users as $user) {
+            $data = ["type" => "users", "data" => $data1];
             $user->getConnection()->send(json_encode($data));
         }
     };
 };
 
-$ws_worker->onClose = function($connection) use(&$users)
-{
+$ws_worker->onClose = function ($connection) use (&$users) {
     // удаляем параметр при отключении пользователя
     $user = array_search($connection, $users);
     unset($users[$user]);
     $data = ["type" => "users", "data" => array_keys($users)];
-    foreach($users as $connection){
+    foreach ($users as $connection) {
         $connection->send(json_encode($data));
     }
 };
