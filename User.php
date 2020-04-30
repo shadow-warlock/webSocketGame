@@ -20,7 +20,14 @@ class User
     {
         return $this->color;
     }
-
+    public function getHP(): array
+    {
+        return $this->hp;
+    }
+    public function getExp(): array
+    {
+        return $this->exp;
+    }
     /**
      * @return array
      */
