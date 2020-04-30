@@ -39,6 +39,7 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
                 "coordinates" => $user->getCoordinates(),
                 "color" => $user->getColor(),
                 "hp" => $user->getHp(),
+                "login" => $user->getLogin(),
                 "exp" => $user->getExp()];
         }
 
@@ -51,13 +52,14 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
 
 $ws_worker->onConnect = function ($connection) use (&$users) {
     $connection->onWebSocketConnect = function ($connection) use (&$users) {
-        $users[$_GET['user']] = new User($connection);
+        $users[$_GET['user']] = new User($connection, $_GET['user']);
         $data1 = [];
         foreach ($users as $user) {
             $data1[] = [
                 "coordinates" => $user->getCoordinates(),
                 "color" => $user->getColor(),
                 "hp" => $user->getHp(),
+                "login" => $user->getLogin(),
                 "exp" => $user->getExp()];
         }
         foreach ($users as $user) {

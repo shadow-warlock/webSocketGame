@@ -16,10 +16,10 @@
                 let vertical = 0;
                 let horizontal = 0;
                 if (keyName === "w"){
-                    vertical = 1;
+                    vertical = -1;
                 }
                 if (keyName === "s"){
-                    vertical = -1;
+                    vertical = 1;
                 }
                 if (keyName === "d"){
                     horizontal = 1;
@@ -38,14 +38,17 @@
                     users = data.data;
                     for (let i=0; i< users.length; i++){
                         let ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
                         ctx.fillStyle = "rgb(" +
                             users[i].color.r + ", " +
                             users[i].color.g + ", " +
                             users[i].color.b +
                             ")";
-                        // ctx.font = "30px Arial";
-                        // ctx.fillText(users[i].hp, users[i].coordinates.x, users[i].coordinates.y);
+                        ctx.font = "30px Arial";
                         ctx.fillRect(users[i].coordinates.x - 25, users[i].coordinates.y - 25, 50, 50);
+                        ctx.fillStyle = "black";
+                        ctx.fillText(users[i].login, users[i].coordinates.x - 25, users[i].coordinates.y - 25);
+
                     }
                     console.log(users);
                 }

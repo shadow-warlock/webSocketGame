@@ -19,10 +19,10 @@ class User
     private $hp;
     private $exp;
 
-    public function __construct($connection)
+    public function __construct($connection, $login)
     {
         $this->connection=$connection;
-        $this->login=$_GET["name"];
+        $this->login=$login;
         $this->coordinates["x"]=rand(0,1000);
         $this->coordinates["y"]=rand(0,1000);
         $this->color["r"]=rand(0,255);
@@ -57,5 +57,14 @@ class User
         $this->coordinates["x"] = $this->coordinates["x"]+$x;
         $this->coordinates["y"] = $this->coordinates["y"]+$y;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLogin() {
+        return $this->login;
+    }
+
+
 
 }
