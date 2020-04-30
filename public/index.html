@@ -27,7 +27,7 @@
                 if (keyName === "a"){
                     horizontal = -1;
                 }
-                ws.send(JSON.stringify({"type":"move", "data":{"horizontal":horizontal, "vertical": vertical}}));
+                ws.send(JSON.stringify({type:"move", data:{horizontal:horizontal, vertical: vertical}}));
             });
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
@@ -39,11 +39,13 @@
                     for (let i=0; i< users.length; i++){
                         let ctx = canvas.getContext('2d');
                         ctx.fillStyle = "rgb(" +
-                            users[i].color["r"] + ", " +
-                            users[i].color["g"] + ", " +
-                            users[i].color["b"] +
+                            users[i].color.r + ", " +
+                            users[i].color.g + ", " +
+                            users[i].color.b +
                             ")";
-                        ctx.fillRect(users[i].coordinates[0], users[i].coordinates[1], 50, 50);
+                        // ctx.font = "30px Arial";
+                        // ctx.fillText(users[i].hp, users[i].coordinates.x, users[i].coordinates.y);
+                        ctx.fillRect(users[i].coordinates.x - 25, users[i].coordinates.y - 25, 50, 50);
                     }
                     console.log(users);
                 }
