@@ -56,6 +56,18 @@ class User
     {
         $this->coordinates["x"] = $this->coordinates["x"]+$x;
         $this->coordinates["y"] = $this->coordinates["y"]+$y;
+        if($this->coordinates["x"] < 0){
+            $this->coordinates["x"] = 1000 + $this->coordinates["x"];
+        }
+        if($this->coordinates["x"] > 1000){
+            $this->coordinates["x"] = 0 + $this->coordinates["x"]%1000;
+        }
+        if($this->coordinates["y"] < 0){
+            $this->coordinates["y"] = 1000 + $this->coordinates["y"];
+        }
+        if($this->coordinates["y"] > 1000){
+            $this->coordinates["y"] = 0 + $this->coordinates["y"]%1000;
+        }
     }
 
     /**

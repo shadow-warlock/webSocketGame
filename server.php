@@ -3,12 +3,29 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/User.php';
 
 use WebSocketGame\User;
+use Workerman\Timer;
 use Workerman\Worker;
 
 $users = [];
 
 $ws_worker = new Worker("websocket://0.0.0.0:8000");
 $ws_worker->onWorkerStart = function () use (&$users) {
+    Timer::add(0.05, function() use (&$users){
+        $userData = [];
+        foreach ($users as $user) {
+            $userData[] = [
+                "coordinates" => $user->getCoordinates(),
+                "color" => $user->getColor(),
+                "hp" => $user->getHp(),
+                "login" => $user->getLogin(),
+                "exp" => $user->getExp()];
+        }
+
+        foreach ($users as $user) {
+            $data = ["type" => "users", "data" => $userData];
+            $user->getConnection()->send(json_encode($data));
+        }
+    });
 //    // создаём локальный tcp-сервер, чтобы отправлять на него сообщения из кода нашего сайта
 //    $inner_tcp_worker = new Worker("tcp://127.0.0.1:1234");
 //    // создаём обработчик сообщений, который будет срабатывать,
@@ -34,38 +51,12 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
                 $user->move($data["data"]["horizontal"]*5,$data["data"]["vertical"]*5);
             }
         }
-        foreach ($users as $user) {
-            $data1[] = [
-                "coordinates" => $user->getCoordinates(),
-                "color" => $user->getColor(),
-                "hp" => $user->getHp(),
-                "login" => $user->getLogin(),
-                "exp" => $user->getExp()];
-        }
-
-        foreach ($users as $user) {
-            $data = ["type" => "users", "data" => $data1];
-            $user->getConnection()->send(json_encode($data));
-        }
     }
 };
 
 $ws_worker->onConnect = function ($connection) use (&$users) {
     $connection->onWebSocketConnect = function ($connection) use (&$users) {
         $users[$_GET['user']] = new User($connection, $_GET['user']);
-        $data1 = [];
-        foreach ($users as $user) {
-            $data1[] = [
-                "coordinates" => $user->getCoordinates(),
-                "color" => $user->getColor(),
-                "hp" => $user->getHp(),
-                "login" => $user->getLogin(),
-                "exp" => $user->getExp()];
-        }
-        foreach ($users as $user) {
-            $data = ["type" => "users", "data" => $data1];
-            $user->getConnection()->send(json_encode($data));
-        }
     };
 };
 
@@ -73,10 +64,6 @@ $ws_worker->onClose = function ($connection) use (&$users) {
     // удаляем параметр при отключении пользователя
     $user = array_search($connection, $users);
     unset($users[$user]);
-    $data = ["type" => "users", "data" => array_keys($users)];
-    foreach ($users as $user) {
-        $user->getConnection()->send(json_encode($data));
-    }
 };
 
 // Run worker
