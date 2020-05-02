@@ -10,19 +10,9 @@ $users = [];
 
 $ws_worker = new Worker("websocket://0.0.0.0:8000");
 $ws_worker->onWorkerStart = function () use (&$users) {
-    Timer::add(0.05, function() use (&$users){
-        $userData = [];
+    Timer::add(0.1, function() use (&$users){
+        $data = ["type" => "users", "data" => $users];
         foreach ($users as $user) {
-            $userData[] = [
-                "coordinates" => $user->getCoordinates(),
-                "color" => $user->getColor(),
-                "hp" => $user->getHp(),
-                "login" => $user->getLogin(),
-                "exp" => $user->getExp()];
-        }
-
-        foreach ($users as $user) {
-            $data = ["type" => "users", "data" => $userData];
             $user->getConnection()->send(json_encode($data));
         }
     });

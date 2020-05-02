@@ -3,8 +3,10 @@
 
 namespace WebSocketGame;
 
-class User
-{
+use JsonSerializable;
+
+class User implements JsonSerializable {
+
     private $connection;
     private $login;
     private $coordinates = [
@@ -30,6 +32,16 @@ class User
         $this->color["b"]=rand(0,255);
         $this->hp=100;
         $this->exp=0;
+    }
+
+    public function jsonSerialize() {
+        $userData = [
+            "coordinates" => $this->getCoordinates(),
+            "color" => $this->getColor(),
+            "hp" => $this->getHp(),
+            "login" => $this->getLogin(),
+            "exp" => $this->getExp()];
+        return $userData;
     }
 
     public function getConnection()
