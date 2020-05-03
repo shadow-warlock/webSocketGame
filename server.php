@@ -5,9 +5,8 @@ require_once __DIR__ . '/GameObject.php';
 require_once __DIR__ . '/User.php';
 require_once __DIR__ . '/Utilities.php';
 
-use WebSocketGame\World;
-use WebSocketGame\GameObject;
 use WebSocketGame\User;
+use WebSocketGame\World;
 use Workerman\Timer;
 use Workerman\Worker;
 
@@ -62,14 +61,18 @@ $ws_worker->onMessage = function ($connection, $data) use (&$world) {
 
 $ws_worker->onConnect = function ($connection) use (&$world) {
     $connection->onWebSocketConnect = function ($connection) use (&$world) {
-        $world->addUser($connection);
+        $world->addUser($connection, $_GET['user']);
+    };
+    $connection->onClose = function($connection) use (&$world)
+    {
+        // удаляем параметр при отключении пользователя
+        $user = array_search($connection, array_map(function(User $user){return $user->getConnection();}, $world->getUsers()));
+        echo $user;
+        $world->removeUser($user);
     };
 };
 
 $ws_worker->onClose = function ($connection) use (&$world) {
-    // удаляем параметр при отключении пользователя
-    $user = array_search($connection, $world->getUsers());
-    unset($world->getUsers()[$user]);
 };
 
 // Run worker

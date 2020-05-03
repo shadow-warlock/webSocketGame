@@ -39,5 +39,11 @@ class  Player extends User{
         ctx.font = "15px Arial";
         ctx.fillStyle = "black";
         ctx.fillText(this.login + " " + this.hp, 25, 25);
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 10;
+        ctx.moveTo(100, 25);
+        ctx.lineTo(100 + (300/this.maxHp*this.hp), 25);
+        ctx.stroke();
     }
 }
