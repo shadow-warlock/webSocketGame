@@ -23,9 +23,10 @@ class User implements JsonSerializable {
     private $exp;
     private $damage = [];
     private $lastMove = 0;
+    private $lastAttack = 0;
+    public const COOLDOWN = 1000;
 
-    public function __construct($connection, $login)
-    {
+    public function __construct($connection, $login){
         $this->connection=$connection;
         $this->login=$login;
         $this->coordinates["x"]=rand(0,1000);
@@ -47,11 +48,12 @@ class User implements JsonSerializable {
             "color" => $this->color,
             "hp" => $this->hp,
             "exp" => $this->exp,
-            "damage"=> $this->damage];
+            "damage" => $this->damage,
+            "lastAttack" => $this->lastAttack,
+            "cooldown" => self::COOLDOWN];
     }
 
-    public function move($x,$y): void
-    {
+    public function move($x,$y): void{
         $currentTime = (int) (microtime(true) * 1000);
         if($currentTime - $this->lastMove < 50){
             echo "net";
@@ -82,7 +84,16 @@ class User implements JsonSerializable {
         return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],self::RADIUS);
     }
 
-    public function takindDamage($damage){
+    public function dealingDamage(User $attacked): void{
+        $currentTime = (int) (microtime(true) * 1000);
+        if($currentTime - $this->lastAttack < self::COOLDOWN){
+            return;
+        }
+        $attacked->takingDamage($this->generatingDamage());
+        $this->lastAttack = $currentTime;
+    }
+
+    public function takingDamage($damage): void{
         if ($this->hp>$damage){
             $this->hp = $this->hp-$damage;
         }
@@ -94,7 +105,7 @@ class User implements JsonSerializable {
         return rand($this->damage[0],$this->damage[1]);
     }
 
-    public function getLogin() {
+    public function getLogin(){
         return $this->login;
     }
     public function getConnection(){

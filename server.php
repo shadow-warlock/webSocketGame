@@ -1,10 +1,8 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/User.php';
-require_once __DIR__ . '/Utilities.php';
 
 use WebSocketGame\User;
-use WebSocketGame\Utilities;
 use Workerman\Timer;
 use Workerman\Worker;
 
@@ -35,7 +33,8 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
                 if ($attacking->meleeRadiusCheck($data["data"]["x"],$data["data"]["y"])) {
                         foreach ($users as $attacked) {
                             if ($attacked->radiusCheck($data["data"]["x"],$data["data"]["y"])) {
-                                $attacked->takindDamage($attacking->generationDamage());
+                                $attacking->dealingDamage($attacked);
+
                             }
                     }
                 }
