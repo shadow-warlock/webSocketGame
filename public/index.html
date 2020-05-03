@@ -30,8 +30,11 @@
 
         function attack(event) {
             if(event.button === 0){
-                let x = event.clientX;
-                let y = event.clientY;
+                let x = event.x;
+                let y = event.y;
+                x -= canvas.offsetLeft;
+                y -= canvas.offsetTop;
+                console.log(x,"---------", y);
                 player.attack(x, y);
             }
         }

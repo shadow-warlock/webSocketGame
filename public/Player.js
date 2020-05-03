@@ -20,6 +20,7 @@ class  Player extends User{
 
     attack(x, y){
         ws.send(JSON.stringify({type: "melee", data: {x: x, y: y}}));
+        console.log(this.lastAttack);
     }
 
     draw(ctx, time) {
@@ -30,7 +31,8 @@ class  Player extends User{
             this.color.b +
             ")";
         ctx.beginPath();
-        ctx.arc(this.coordinates.x, this.coordinates.y, 40, 0, 2 * Math.PI * ((this.time - this.lastAttack)/this.cooldown));
+        ctx.arc(this.coordinates.x, this.coordinates.y, this.meleeRadius, 0, 2 * Math.PI * ((this.time - this.lastAttack)/this.cooldown));
         ctx.fill();
+        // console.log("time = " + time + "; cooldown = " + this.cooldown + "; lastAttack = " + this.lastAttack);
     }
 }
