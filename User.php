@@ -2,9 +2,7 @@
 
 namespace WebSocketGame;
 
-use JsonSerializable;
-
-class User extends GameObject implements JsonSerializable {
+class User extends GameObject{
 
     private $connection;
     private $login;
@@ -25,7 +23,7 @@ class User extends GameObject implements JsonSerializable {
     }
 
     public function jsonSerialize() {
-        return [
+        return array_merge(parent::jsonSerialize(), [
             "login" => $this->login,
             "coordinates" => $this->coordinates,
             "radius" => $this->radius,
@@ -36,7 +34,7 @@ class User extends GameObject implements JsonSerializable {
             "exp" => $this->exp,
             "damage" => $this->damage,
             "lastAttack" => $this->lastAttack,
-            "cooldown" => self::COOLDOWN];
+            "cooldown" => self::COOLDOWN]);
     }
 
     public function move($x,$y): void{

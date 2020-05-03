@@ -3,8 +3,9 @@
 
 namespace WebSocketGame;
 
+use JsonSerializable;
 
-class GameObject{
+class GameObject implements JsonSerializable{
     protected $coordinates = [
         "x" => 0,
         "y" => 0,
@@ -27,6 +28,15 @@ class GameObject{
         $this->color["b"]=$b;
         $this->maxHp=$hp;
         $this->hp=$hp;
+    }
+
+    public function jsonSerialize() {
+        return [
+            "coordinates" => $this->coordinates,
+            "radius" => $this->radius,
+            "color" => $this->color,
+            "maxHp" => $this->maxHp,
+            "hp" => $this->hp];
     }
 
     public function takingDamage($damage): void{

@@ -9,7 +9,7 @@
 
         let ws;
         function openWS() {
-            ws = new WebSocket("ws://0.0.0.0:8000?user=" + $('#nick').val());
+            ws = new WebSocket("ws://192.168.1.40:8000?user=" + $('#nick').val());
             $('#main_block').show();
             $('#login_form').hide();
             canvas = document.getElementById('canvas');
