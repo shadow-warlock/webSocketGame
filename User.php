@@ -4,22 +4,11 @@ namespace WebSocketGame;
 
 use JsonSerializable;
 
-class User implements JsonSerializable {
+class User extends GameObject implements JsonSerializable {
 
     private $connection;
     private $login;
-    private $coordinates = [
-        "x" => 0,
-        "y" => 0,
-    ];
-    public const RADIUS = 20;
-    public const MELEE_RADIUS = 50;
-    private $color = [
-        "r" => 0,
-        "g" => 0,
-        "b" => 0,
-    ];
-    private $hp;
+    public $meleeRadius;
     private $exp;
     private $damage = [];
     private $lastMove = 0;
@@ -27,14 +16,10 @@ class User implements JsonSerializable {
     public const COOLDOWN = 1000;
 
     public function __construct($connection, $login){
+        parent::__construct(20, rand(0,255), rand(0,255), rand(0,255), 100);
         $this->connection=$connection;
         $this->login=$login;
-        $this->coordinates["x"]=rand(0,1000);
-        $this->coordinates["y"]=rand(0,1000);
-        $this->color["r"]=rand(0,255);
-        $this->color["g"]=rand(0,255);
-        $this->color["b"]=rand(0,255);
-        $this->hp=100;
+        $this->meleeRadius=50;
         $this->exp=0;
         $this->damage=[10,20];
     }
@@ -43,9 +28,10 @@ class User implements JsonSerializable {
         return [
             "login" => $this->login,
             "coordinates" => $this->coordinates,
-            "radius" => self::RADIUS,
-            "meleeRadius" => self::MELEE_RADIUS,
+            "radius" => $this->radius,
+            "meleeRadius" => $this->meleeRadius,
             "color" => $this->color,
+            "maxHp" => $this->maxHp,
             "hp" => $this->hp,
             "exp" => $this->exp,
             "damage" => $this->damage,
@@ -76,11 +62,7 @@ class User implements JsonSerializable {
     }
 
     public function meleeRadiusCheck($x,$y): bool{
-        return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],self::MELEE_RADIUS);
-    }
-
-    public function radiusCheck($x,$y): bool{
-        return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],self::RADIUS);
+        return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],$this->meleeRadius);
     }
 
     public function dealingDamage(User $attacked): void{
@@ -90,14 +72,6 @@ class User implements JsonSerializable {
         }
         $attacked->takingDamage($this->generatingDamage());
         $this->lastAttack = $currentTime;
-    }
-
-    public function takingDamage($damage): void{
-        if ($this->hp>$damage){
-            $this->hp = $this->hp-$damage;
-        }
-        else
-            $this->hp = 0;
     }
 
     public function generatingDamage(): int{
@@ -110,14 +84,8 @@ class User implements JsonSerializable {
     public function getConnection(){
         return $this->connection;
     }
-    public function getCoordinates(): array{
-        return $this->coordinates;
-    }
     public function getColor(): array{
         return $this->color;
-    }
-    public function getHp(): int{
-        return $this->hp;
     }
     public function getExp(): int{
         return $this->exp;

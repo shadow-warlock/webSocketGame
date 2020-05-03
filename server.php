@@ -3,6 +3,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/User.php';
 require_once __DIR__ . '/Utilities.php';
 
+use WebSocketGame\GameObject;
 use WebSocketGame\User;
 use Workerman\Timer;
 use Workerman\Worker;
@@ -17,6 +18,9 @@ $ws_worker->onWorkerStart = function () use (&$users) {
             $user->getConnection()->send($data);
         }
     });
+    for ($i=0;$i<5;$i++){
+        $stones[i] = new GameObject(40,50, 50,10,200);
+    };
 };
 
 $ws_worker->onMessage = function ($connection, $data) use (&$users) {
@@ -33,9 +37,8 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
             if ($attacking->getConnection() === $connection) {
                 if ($attacking->meleeRadiusCheck($data["data"]["x"],$data["data"]["y"])) {
                         foreach ($users as $attacked) {
-                            if ($attacked->radiusCheck($data["data"]["x"],$data["data"]["y"])) {
+                            if (($attacked->radiusCheck($data["data"]["x"],$data["data"]["y"])) &&($attacking!=$attacked)){
                                 $attacking->dealingDamage($attacked);
-
                             }
                     }
                 }
