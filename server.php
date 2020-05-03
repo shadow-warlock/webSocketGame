@@ -32,7 +32,7 @@ $ws_worker->onMessage = function($connection, $data) use (&$users) {
             if($attacking->getConnection() === $connection) {
                 if($attacking->meleeRadiusCheck($data["data"]["x"], $data["data"]["y"])) {
                     foreach($users as $attacked) {
-                        if($attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
+                        if($attacking !== $attacked && $attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
                             $attacking->dealingDamage($attacked);
                         }
                     }
