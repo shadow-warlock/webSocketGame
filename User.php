@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebSocketGame;
 
 use JsonSerializable;
@@ -13,6 +12,8 @@ class User implements JsonSerializable {
         "x" => 0,
         "y" => 0,
     ];
+    public const RADIUS = 20;
+    public const MELEE_RADIUS = 50;
     private $color = [
         "r" => 0,
         "g" => 0,
@@ -20,6 +21,7 @@ class User implements JsonSerializable {
     ];
     private $hp;
     private $exp;
+    private $damage = [];
     private $lastMove = 0;
 
     public function __construct($connection, $login)
@@ -33,38 +35,21 @@ class User implements JsonSerializable {
         $this->color["b"]=rand(0,255);
         $this->hp=100;
         $this->exp=0;
+        $this->damage=[10,20];
     }
 
     public function jsonSerialize() {
         return [
-            "coordinates" => $this->getCoordinates(),
-            "color" => $this->getColor(),
-            "hp" => $this->getHp(),
-            "login" => $this->getLogin(),
-            "exp" => $this->getExp()
-        ];
+            "login" => $this->login,
+            "coordinates" => $this->coordinates,
+            "radius" => self::RADIUS,
+            "meleeRadius" => self::MELEE_RADIUS,
+            "color" => $this->color,
+            "hp" => $this->hp,
+            "exp" => $this->exp,
+            "damage"=> $this->damage];
     }
 
-    public function getConnection()
-    {
-        return $this->connection;
-    }
-    public function getCoordinates(): array
-    {
-        return $this->coordinates;
-    }
-    public function getColor(): array
-    {
-        return $this->color;
-    }
-    public function getHp(): int
-    {
-        return $this->hp;
-    }
-    public function getExp(): int
-    {
-        return $this->exp;
-    }
     public function move($x,$y): void
     {
         $currentTime = (int) (microtime(true) * 1000);
@@ -89,13 +74,42 @@ class User implements JsonSerializable {
         }
     }
 
-    /**
-     * @return mixed
-     */
+    public function meleeRadiusCheck($x,$y): bool{
+        return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],self::MELEE_RADIUS);
+    }
+
+    public function radiusCheck($x,$y): bool{
+        return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],self::RADIUS);
+    }
+
+    public function takindDamage($damage){
+        if ($this->hp>$damage){
+            $this->hp = $this->hp-$damage;
+        }
+        else
+            $this->hp = 0;
+    }
+
+    public function generatingDamage(): int{
+        return rand($this->damage[0],$this->damage[1]);
+    }
+
     public function getLogin() {
         return $this->login;
     }
-
-
-
+    public function getConnection(){
+        return $this->connection;
+    }
+    public function getCoordinates(): array{
+        return $this->coordinates;
+    }
+    public function getColor(): array{
+        return $this->color;
+    }
+    public function getHp(): int{
+        return $this->hp;
+    }
+    public function getExp(): int{
+        return $this->exp;
+    }
 }
