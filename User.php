@@ -56,7 +56,6 @@ class User implements JsonSerializable {
     public function move($x,$y): void{
         $currentTime = (int) (microtime(true) * 1000);
         if($currentTime - $this->lastMove < 50){
-            echo "net";
             return;
         }
         $this->lastMove = $currentTime;
