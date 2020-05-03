@@ -30,8 +30,12 @@
 
         function attack(event) {
             if(event.button === 0){
-                let x = event.clientX;
-                let y = event.clientY;
+                let x = event.clientX + document.body.scrollLeft +
+                    document.documentElement.scrollLeft;
+                let y = event.clientY + document.body.scrollTop +
+                    document.documentElement.scrollTop;
+                x -= canvas.offsetLeft;
+                y -= canvas.offsetTop;
                 player.attack(x, y);
             }
         }

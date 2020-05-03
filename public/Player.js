@@ -30,7 +30,9 @@ class  Player extends User{
             this.color.b +
             ")";
         ctx.beginPath();
-        ctx.arc(this.coordinates.x, this.coordinates.y, 40, 0, 2 * Math.PI * ((this.time - this.lastAttack)/this.cooldown));
+        let currentCooldown = time - this.lastAttack > this.cooldown ? this.cooldown : time - this.lastAttack;
+        ctx.arc(this.coordinates.x, this.coordinates.y, this.meleeRadius, 0, 2 * Math.PI * (1-((currentCooldown))/this.cooldown));
         ctx.fill();
+        // console.log("time = " + time + "; cooldown = " + this.cooldown + "; lastAttack = " + this.lastAttack);
     }
 }

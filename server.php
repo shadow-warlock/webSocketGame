@@ -32,14 +32,14 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
             }
         }
     }
-    if ($data["type"]==="melee") {
-        foreach ($users as $attacking) {
-            if ($attacking->getConnection() === $connection) {
-                if ($attacking->meleeRadiusCheck($data["data"]["x"],$data["data"]["y"])) {
-                        foreach ($users as $attacked) {
-                            if (($attacked->radiusCheck($data["data"]["x"],$data["data"]["y"])) &&($attacking!=$attacked)){
-                                $attacking->dealingDamage($attacked);
-                            }
+    if($data["type"] === "melee") {
+        foreach($users as $attacking) {
+            if($attacking->getConnection() === $connection) {
+                if($attacking->meleeRadiusCheck($data["data"]["x"], $data["data"]["y"])) {
+                    foreach($users as $attacked) {
+                        if($attacking !== $attacked && $attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
+                            $attacking->dealingDamage($attacked);
+                        }
                     }
                 }
             }

@@ -10,7 +10,7 @@ class  User {
             this.color.b +
             ")";
         ctx.beginPath();
-        ctx.arc(this.coordinates.x, this.coordinates.y, 20, 0, 2 * Math.PI);
+        ctx.arc(this.coordinates.x, this.coordinates.y, this.radius, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.fill();
         ctx.strokeStyle = "rgb(" +
@@ -19,7 +19,7 @@ class  User {
             this.color.b +
             ")";
         ctx.beginPath();
-        ctx.arc(this.coordinates.x, this.coordinates.y, 40, 0, 2 * Math.PI);
+        ctx.arc(this.coordinates.x, this.coordinates.y, this.meleeRadius, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.stroke();
         ctx.font = "15px Arial";
