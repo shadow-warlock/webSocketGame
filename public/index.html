@@ -4,6 +4,7 @@
     <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
     <script src="/User.js"></script>
     <script src="/Player.js"></script>
+    <script src="/GameObject.js"></script>
     <script src="/app.js"></script>
     <script>
 
@@ -20,30 +21,36 @@
             topCanvas.height = window.innerHeight * 0.1; //document.height is obsolete
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
-                if (data.type === "users") {
+                if (data.type === "world") {
                     users = [];
+                    objects = [];
+                    world = {
+                        width: data.data.width,
+                        height: data.data.height
+                    };
                     time = data.time;
-                    for (let i = 0; i < data.data.length; i++) {
-                        if ($('#nick').val() === data.data[i].login) {
+                    for (let i = 0; i < data.data.users.length; i++) {
+                        if ($('#nick').val() === data.data.users[i].login) {
                             if (player) {
-                                player.update(data.data[i]);
-                                onPlayerCreate();
+                                player.update(data.data.users[i]);
                             } else {
-                                player = new Player(data.data[i], ws);
+                                player = new Player(data.data.users[i], ws);
+                                onPlayerCreate();
+                            }
+                            if(player.hp === 0){
+                                alert("Вы погибли, нажмите ОК для воскрешения!");
+                                ws.close();
+                                openWS();
                             }
                         } else {
-                            users.push(new User(data.data[i]));
+                            users.push(new User(data.data.users[i]));
                         }
                     }
-                    let ctx = canvas.getContext('2d');
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    let topCtx = topCanvas.getContext('2d');
-                    topCtx.clearRect(0, 0, canvas.width, canvas.height);
-                    for (let i = 0; i < users.length; i++) {
-                        users[i].draw(ctx);
+                    for (let i = 0; i < data.data.stones.length; i++) {
+                        objects.push(new GameObject(data.data.stones[i]));
                     }
-                    player.draw(ctx, time);
-                    player.drawTop(topCtx, time);
+                    draw();
+                    drawTop();
                 }
             };
         }

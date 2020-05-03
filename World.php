@@ -23,9 +23,15 @@ class World implements JsonSerializable{
             "stones" => $this->stones];
     }
 
-    public function addUser($connection){
-        $this->users[]=new User($connection, $_GET['user']);
+    public function addUser($connection, $login){
+        $this->users[] = new User($connection, $login);
     }
+
+    public function removeUser($user){
+        unset($this->users[$user]);
+        $this->users = array_values($this->users);
+    }
+
     public function addStone(){
         $this->stones[]=new GameObject(40,50, 50,10,200);
     }

@@ -1,8 +1,33 @@
 let users = [];
+let world = {};
+let objects = [];
 let player = null;
 let canvas;
 let topCanvas;
 let time = 0;
+
+function draw() {
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgb(80, 220, 100)";
+    ctx.fillRect(0,0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(-player.coordinates.x + canvas.width/2, -player.coordinates.y + canvas.height/2);
+    for (let i = 0; i < objects.length; i++) {
+        objects[i].draw(ctx);
+    }
+    for (let i = 0; i < users.length; i++) {
+        users[i].draw(ctx);
+    }
+    player.draw(ctx, time);
+    ctx.restore();
+}
+
+function drawTop() {
+    let topCtx = topCanvas.getContext('2d');
+    topCtx.clearRect(0, 0, canvas.width, canvas.height);
+    player.drawTop(topCtx, time);
+}
 
 function onPlayerCreate() {
     document.addEventListener('keydown', (event) => {
@@ -42,6 +67,6 @@ function attack(event) {
             document.documentElement.scrollTop;
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
-        player.attack(x, y);
+        player.attack(x + player.coordinates.x - canvas.width/2, y + player.coordinates.y - canvas.height/2);
     }
 }

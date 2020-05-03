@@ -63,7 +63,7 @@ class User extends GameObject{
         return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],$this->meleeRadius);
     }
 
-    public function dealingDamage(User $attacked): void{
+    public function dealingDamage(GameObject $attacked): void{
         $currentTime = (int) (microtime(true) * 1000);
         if($currentTime - $this->lastAttack < self::COOLDOWN){
             return;
