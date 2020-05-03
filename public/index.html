@@ -9,6 +9,7 @@
         let player = null;
         let ws;
         let canvas;
+        let time = 0;
 
         function press(event, type) {
             const keyName = event.code;
@@ -44,6 +45,7 @@
                 let data = JSON.parse(evt.data);
                 if (data.type === "users") {
                     users = [];
+                    time = data.time;
                     for (let i=0; i < data.data.length; i++){
                         if($('#nick').val() === data.data[i].login){
                             if(player){
@@ -70,7 +72,7 @@
                     for (let i = 0; i < users.length; i++) {
                         users[i].draw(ctx);
                     }
-                    player.draw(ctx);
+                    player.draw(ctx, time);
                 }
             };
         }

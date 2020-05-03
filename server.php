@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/User.php';
+require_once __DIR__ . '/Utilities.php';
 
 use WebSocketGame\User;
 use Workerman\Timer;
@@ -11,7 +12,7 @@ $users = [];
 $ws_worker = new Worker("websocket://0.0.0.0:8000");
 $ws_worker->onWorkerStart = function () use (&$users) {
     Timer::add(0.02, function() use   (&$users){
-        $data = json_encode(["type" => "users", "data" => array_values($users)]);
+        $data = json_encode(["type" => "users", "data" => array_values($users), "time" => (int) (microtime(true) * 1000)]);
         foreach ($users as $user) {
             $user->getConnection()->send($data);
         }

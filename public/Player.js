@@ -4,16 +4,11 @@ class  Player extends User{
         this.socket = socket;
         this.horizontal = 0;
         this.vertical = 0;
-        this.cooldown = 0;
-        this.cooldownMax = 2000;
     }
 
     work(){
         if(this.horizontal !== 0 || this.vertical !== 0) {
             ws.send(JSON.stringify({type: "move", data: {horizontal: this.horizontal, vertical: this.vertical}}));
-        }
-        if(this.cooldown > 0){
-            this.cooldown = this.cooldown - 50 > 0 ? this.cooldown - 50 : 0
         }
     }
 
@@ -24,12 +19,10 @@ class  Player extends User{
     }
 
     attack(x, y){
-        if(this.cooldown <= 0){
-            this.cooldown = this.cooldownMax;
-        }
+        ws.send(JSON.stringify({type: "melee", data: {x: x, y: y}}));
     }
 
-    draw(ctx) {
+    draw(ctx, time) {
         super.draw(ctx);
         ctx.fillStyle = "rgb(" +
             this.color.r + ", " +
@@ -37,7 +30,7 @@ class  Player extends User{
             this.color.b +
             ")";
         ctx.beginPath();
-        ctx.arc(this.coordinates.x, this.coordinates.y, 40, 0, 2 * Math.PI * (this.cooldown/this.cooldownMax));
+        ctx.arc(this.coordinates.x, this.coordinates.y, 40, 0, 2 * Math.PI * ((this.time - this.lastAttack)/this.cooldown));
         ctx.fill();
     }
 }
