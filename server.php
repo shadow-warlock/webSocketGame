@@ -19,7 +19,7 @@ $ws_worker->onWorkerStart = function () use (&$users) {
         }
     });
     for ($i=0;$i<5;$i++){
-        $stones[i] = new GameObject(40,50, 50,10,200);
+        $stones[$i] = new GameObject(40,50, 50,10,200);
     };
 };
 
