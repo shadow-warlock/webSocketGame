@@ -6,45 +6,25 @@ namespace WebSocketGame;
 use JsonSerializable;
 
 class GameObject implements JsonSerializable{
+    protected $name;
     protected $coordinates = [
         "x" => 0,
         "y" => 0,
     ];
-    protected $color = [
-        "r" => 0,
-        "g" => 0,
-        "b" => 0,
-    ];
     protected $radius;
-    protected $maxHp;
-    protected  $hp;
 
-    public function __construct($radius,$r, $g, $b, $hp){
-        $this->coordinates["x"]=rand(0,1000);
-        $this->coordinates["y"]=rand(0,1000);
+    public function __construct($name, $x, $y, $radius){
+        $this->name=$name;
+        $this->coordinates["x"]=$x;
+        $this->coordinates["y"]=$y;
         $this->radius=$radius;
-        $this->color["r"]=$r;
-        $this->color["g"]=$g;
-        $this->color["b"]=$b;
-        $this->maxHp=$hp;
-        $this->hp=$hp;
     }
 
     public function jsonSerialize() {
         return [
+            "name" => $this->name,
             "coordinates" => $this->coordinates,
-            "radius" => $this->radius,
-            "color" => $this->color,
-            "maxHp" => $this->maxHp,
-            "hp" => $this->hp];
-    }
-
-    public function takingDamage($damage): void{
-        if ($this->hp>$damage){
-            $this->hp = $this->hp-$damage;
-        }
-        else
-            $this->hp = 0;
+            "radius" => $this->radius];
     }
 
     public function radiusCheck($x,$y): bool{
@@ -53,8 +33,5 @@ class GameObject implements JsonSerializable{
 
     public function getCoordinates(): array{
         return $this->coordinates;
-    }
-    public function getHp(): int{
-        return $this->hp;
     }
 }

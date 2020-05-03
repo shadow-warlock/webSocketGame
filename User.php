@@ -2,7 +2,7 @@
 
 namespace WebSocketGame;
 
-class User extends GameObject{
+class User extends TakingDamageObject{
 
     private $connection;
     private $login;
@@ -13,8 +13,8 @@ class User extends GameObject{
     private $lastAttack = 0;
     public const COOLDOWN = 1000;
 
-    public function __construct($connection, $login){
-        parent::__construct(20, rand(0,255), rand(0,255), rand(0,255), 100);
+    public function __construct($connection, $login, $x, $y){
+        parent::__construct("user",20, 100, $x, $y);
         $this->connection=$connection;
         $this->login=$login;
         $this->meleeRadius=50;
@@ -25,12 +25,7 @@ class User extends GameObject{
     public function jsonSerialize() {
         return array_merge(parent::jsonSerialize(), [
             "login" => $this->login,
-            "coordinates" => $this->coordinates,
-            "radius" => $this->radius,
             "meleeRadius" => $this->meleeRadius,
-            "color" => $this->color,
-            "maxHp" => $this->maxHp,
-            "hp" => $this->hp,
             "exp" => $this->exp,
             "damage" => $this->damage,
             "lastAttack" => $this->lastAttack,
@@ -63,7 +58,7 @@ class User extends GameObject{
         return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],$this->meleeRadius);
     }
 
-    public function dealingDamage(User $attacked): void{
+    public function dealingDamage(GameObject $attacked): void{
         $currentTime = (int) (microtime(true) * 1000);
         if($currentTime - $this->lastAttack < self::COOLDOWN){
             return;
