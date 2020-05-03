@@ -33,6 +33,11 @@ class  Player extends User{
         let currentCooldown = time - this.lastAttack > this.cooldown ? this.cooldown : time - this.lastAttack;
         ctx.arc(this.coordinates.x, this.coordinates.y, this.meleeRadius, 0, 2 * Math.PI * (1-((currentCooldown))/this.cooldown));
         ctx.fill();
-        // console.log("time = " + time + "; cooldown = " + this.cooldown + "; lastAttack = " + this.lastAttack);
+    }
+
+    drawTop(ctx, time) {
+        ctx.font = "15px Arial";
+        ctx.fillStyle = "black";
+        ctx.fillText(this.login + " " + this.hp, 25, 25);
     }
 }

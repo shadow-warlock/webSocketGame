@@ -25,6 +25,9 @@ class  User {
         ctx.font = "15px Arial";
         ctx.fillStyle = "black";
         ctx.fillText(this.login, this.coordinates.x - 25, this.coordinates.y - 25);
+        ctx.strokeStyle = "red";
+        ctx.moveTo(this.coordinates.x - 25, this.coordinates.y - 25);
+        ctx.lineTo(this.coordinates.x - 25 + (50/this.maxHp*this.hp), this.coordinates.y - 25);
 
     }
 }

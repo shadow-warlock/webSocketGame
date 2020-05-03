@@ -1,82 +1,49 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" style="margin: 0 !important;padding: 0 !important;">
 <head>
     <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
     <script src="/User.js"></script>
     <script src="/Player.js"></script>
+    <script src="/app.js"></script>
     <script>
-        let users = [];
-        let player = null;
+
         let ws;
-        let canvas;
-        let time = 0;
-
-        function press(event, type) {
-            const keyName = event.code;
-            if (keyName === "KeyW") {
-                player.vertical = (type ? -1 : 0);
-            }
-            if (keyName === "KeyS") {
-                player.vertical = (type ? 1 : 0);
-            }
-            if (keyName === "KeyD") {
-                player.horizontal = (type ? 1 : 0);
-            }
-            if (keyName === "KeyA") {
-                player.horizontal = type ? -1 : 0;
-            }
-        }
-
-
-        function attack(event) {
-            if(event.button === 0){
-                let x = event.clientX + document.body.scrollLeft +
-                    document.documentElement.scrollLeft;
-                let y = event.clientY + document.body.scrollTop +
-                    document.documentElement.scrollTop;
-                x -= canvas.offsetLeft;
-                y -= canvas.offsetTop;
-                player.attack(x, y);
-            }
-        }
-
         function openWS() {
             ws = new WebSocket("ws://0.0.0.0:8000?user=" + $('#nick').val());
             $('#main_block').show();
             $('#login_form').hide();
             canvas = document.getElementById('canvas');
+            topCanvas = document.getElementById('top_canvas');
+            canvas.width = window.innerWidth * 0.9; //document.width is obsolete
+            canvas.height = window.innerHeight * 0.85; //document.height is obsolete
+            topCanvas.width = window.innerWidth * 0.9; //document.width is obsolete
+            topCanvas.height = window.innerHeight * 0.1; //document.height is obsolete
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
                 if (data.type === "users") {
                     users = [];
                     time = data.time;
-                    for (let i=0; i < data.data.length; i++){
-                        if($('#nick').val() === data.data[i].login){
-                            if(player){
+                    for (let i = 0; i < data.data.length; i++) {
+                        if ($('#nick').val() === data.data[i].login) {
+                            if (player) {
                                 player.update(data.data[i]);
-                            }else{
+                                onPlayerCreate();
+                            } else {
                                 player = new Player(data.data[i], ws);
-                                document.addEventListener('keydown', (event) => {
-                                    press(event, true);
-                                });
-                                document.addEventListener('keyup', (event) => {
-                                    press(event, false);
-                                });
-                                canvas.addEventListener('mousedown', attack);
-                                setInterval(() => {
-                                    player.work();
-                                }, 50);
                             }
-                        }else{
+                        } else {
                             users.push(new User(data.data[i]));
                         }
                     }
                     let ctx = canvas.getContext('2d');
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    let topCtx = topCanvas.getContext('2d');
+                    topCtx.clearRect(0, 0, canvas.width, canvas.height);
                     for (let i = 0; i < users.length; i++) {
                         users[i].draw(ctx);
                     }
                     player.draw(ctx, time);
+                    player.drawTop(topCtx, time);
                 }
             };
         }
@@ -87,7 +54,7 @@
     <meta charset="UTF-8">
     <title>socket</title>
 </head>
-<body>
+<body style="margin: 0 !important;padding: 0 !important;">
 <div id="login_form">
     <label>Введи никнейм
         <input id="nick"/>
@@ -95,7 +62,10 @@
     <button id="connect" onclick="openWS()">connect</button>
 </div>
 <div id="main_block" style="display: none">
-    <canvas id="canvas" width="1000" height="1000"></canvas>
+    <div style="width: 100%; display: flex; flex-direction: column">
+        <canvas style="border: 1px solid black; margin: auto;" id="top_canvas"></canvas>
+        <canvas style="border: 1px solid black; margin: auto;" id="canvas"></canvas>
+    </div>
 </div>
 </body>
 </html>

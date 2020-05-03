@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/User.php';
 require_once __DIR__ . '/Utilities.php';
+require_once __DIR__ . '/GameObject.php';
+require_once __DIR__ . '/User.php';
 
 use WebSocketGame\GameObject;
 use WebSocketGame\User;
