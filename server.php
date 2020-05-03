@@ -10,25 +10,12 @@ $users = [];
 
 $ws_worker = new Worker("websocket://0.0.0.0:8000");
 $ws_worker->onWorkerStart = function () use (&$users) {
-    Timer::add(0.1, function() use (&$users){
-        $data = ["type" => "users", "data" => $users];
+    Timer::add(0.02, function() use (&$users){
+        $data = json_encode(["type" => "users", "data" => array_values($users)]);
         foreach ($users as $user) {
-            $user->getConnection()->send(json_encode($data));
+            $user->getConnection()->send($data);
         }
     });
-//    // создаём локальный tcp-сервер, чтобы отправлять на него сообщения из кода нашего сайта
-//    $inner_tcp_worker = new Worker("tcp://127.0.0.1:1234");
-//    // создаём обработчик сообщений, который будет срабатывать,
-//    // когда на локальный tcp-сокет приходит сообщение
-//    $inner_tcp_worker->onMessage = function($connection, $data) use (&$users) {
-//        $data = json_decode($data);
-//        // отправляем сообщение пользователю по userId
-//        if (isset($users[$data->user])) {
-//            $webconnection = $users[$data->user];
-//            $webconnection->send($data->message);
-//        }
-//    };
-//    $inner_tcp_worker->listen();
 };
 
 
@@ -38,7 +25,7 @@ $ws_worker->onMessage = function ($connection, $data) use (&$users) {
     if ($data["type"]==="move") {
         foreach ($users as $user) {
             if ($user->getConnection() === $connection) {
-                $user->move($data["data"]["horizontal"]*5,$data["data"]["vertical"]*5);
+                $user->move($data["data"]["horizontal"]*3,$data["data"]["vertical"]*3);
             }
         }
     }

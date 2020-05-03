@@ -20,6 +20,7 @@ class User implements JsonSerializable {
     ];
     private $hp;
     private $exp;
+    private $lastMove = 0;
 
     public function __construct($connection, $login)
     {
@@ -35,13 +36,13 @@ class User implements JsonSerializable {
     }
 
     public function jsonSerialize() {
-        $userData = [
+        return [
             "coordinates" => $this->getCoordinates(),
             "color" => $this->getColor(),
             "hp" => $this->getHp(),
             "login" => $this->getLogin(),
-            "exp" => $this->getExp()];
-        return $userData;
+            "exp" => $this->getExp()
+        ];
     }
 
     public function getConnection()
@@ -66,6 +67,12 @@ class User implements JsonSerializable {
     }
     public function move($x,$y): void
     {
+        $currentTime = (int) (microtime(true) * 1000);
+        if($currentTime - $this->lastMove < 50){
+            echo "net";
+            return;
+        }
+        $this->lastMove = $currentTime;
         $this->coordinates["x"] = $this->coordinates["x"]+$x;
         $this->coordinates["y"] = $this->coordinates["y"]+$y;
         if($this->coordinates["x"] < 0){
