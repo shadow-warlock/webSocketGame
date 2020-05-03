@@ -24,7 +24,7 @@ $ws_worker->onWorkerStart = function () use (&$world) {
     });
 
     for ($i=0;$i<5;$i++){
-        $world->addStone(new GameObject(40,50, 50,10,200));
+        $world->addStone();
     };
 };
 
@@ -34,6 +34,7 @@ $ws_worker->onMessage = function ($connection, $data) use (&$world) {
         foreach ($world->getUsers() as $user) {
             if ($user->getConnection() === $connection) {
                 $user->move($data["data"]["horizontal"]*3,$data["data"]["vertical"]*3);
+                return;
             }
         }
     }
@@ -44,6 +45,13 @@ $ws_worker->onMessage = function ($connection, $data) use (&$world) {
                     foreach($world->getUsers() as $attacked) {
                         if($attacking !== $attacked && $attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
                             $attacking->dealingDamage($attacked);
+                            return;
+                        }
+                    }
+                    foreach($world->getStones() as $attacked) {
+                        if($attacking !== $attacked && $attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
+                            $attacking->dealingDamage($attacked);
+                            return;
                         }
                     }
                 }
@@ -54,7 +62,7 @@ $ws_worker->onMessage = function ($connection, $data) use (&$world) {
 
 $ws_worker->onConnect = function ($connection) use (&$world) {
     $connection->onWebSocketConnect = function ($connection) use (&$world) {
-        $world->addUser(new User($connection, $_GET['user']));
+        $world->addUser($connection);
     };
 };
 

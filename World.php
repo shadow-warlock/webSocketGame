@@ -23,11 +23,11 @@ class World implements JsonSerializable{
             "stones" => $this->stones];
     }
 
-    public function addUser($user){
-        $this->users[]=$user;
+    public function addUser($connection){
+        $this->users[]=new User($connection, $_GET['user']);
     }
-    public function addStone($stone){
-        $this->stones[]=$stone;
+    public function addStone(){
+        $this->stones[]=new GameObject(40,50, 50,10,200);
     }
 
     public function getWidth(): int
