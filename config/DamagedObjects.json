@@ -1,0 +1,22 @@
+{
+  "Stone":{
+    "radius": 50,
+    "hp": 200,
+    "lootBox":{
+      "stone":{
+        "chance": 0.5,
+        "quantities": [1, 10]
+      }
+    }
+  },
+  "Wood":{
+    "radius": 50,
+    "hp": 200,
+    "lootBox":{
+      "wood":{
+        "chance": 0.5,
+        "quantities": [1, 10]
+      }
+    }
+  }
+}

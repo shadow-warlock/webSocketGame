@@ -1,0 +1,8 @@
+{
+  "stone":{
+    "radius": 30
+  },
+  "wood":{
+    "radius": 30
+  }
+}

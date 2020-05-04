@@ -4,6 +4,7 @@
 namespace WebSocketGame\Model;
 
 use JsonSerializable;
+use WebSocketGame\Utilities;
 
 class GameObject implements JsonSerializable{
     protected $name;

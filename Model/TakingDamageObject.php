@@ -38,7 +38,7 @@ class TakingDamageObject extends GameObject{
     }
 
     public function droppingLoot(){
-        return array_map(function ($item){return array_merge($item, generatedDroppedCoordinates());}, $this->lootBox->generatingLoot());
+        return array_map(function ($item){return array_merge($item, $this->generatedDroppedCoordinates());}, $this->lootBox->generatingLoot());
     }
 
     protected function generatedDroppedCoordinates(){

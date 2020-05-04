@@ -14,13 +14,19 @@ class World implements JsonSerializable{
     private $users = [];
     private $damagedObjects = [];
     private $droppedObjects = [];
+    private $objectFactory;
 
      public function __construct(){
+         $this->objectFactory = new ObjectFactory();
          $this->width = 10000;
          $this->height = 10000;
-         for ($i = 0; $i < 100; $i++) {
-             $this->addDamagedObject("Stone");
-         };
+         $json = file_get_contents(__DIR__ . "/config/StartConfig.json");
+         $config = json_decode($json, true);
+         foreach($config as $obj => $count){
+             for($i = 0; $i < $count; $i++){
+                 $this->damagedObjects[] = $this->objectFactory->create($obj, rand(0,$this->width), rand(0,$this->height));
+             }
+         }
      }
 
     public function jsonSerialize() {
@@ -29,7 +35,8 @@ class World implements JsonSerializable{
             "height" => $this->height,
             "users" => $this->users,
             "droppedObjects" => $this->droppedObjects,
-            "damagedObjects" => $this->damagedObjects];
+            "damagedObjects" => $this->damagedObjects
+        ];
     }
 
     public function moveUser(User $user, $horizontal, $vertical){
@@ -82,8 +89,7 @@ class World implements JsonSerializable{
     }
 
     public function addDamagedObject($name){
-         $factory = new ObjectFactory();
-         $object = $factory->create($name, rand(0,$this->width), rand(0,$this->height));
+         $object = $this->objectFactory->create($name, rand(0,$this->width), rand(0,$this->height));
          if($object !== null){
              $this->damagedObjects[] = $object;
          }
@@ -95,13 +101,11 @@ class World implements JsonSerializable{
     }
 
     public function addDroppedObject($name, $x, $y, $quantity){
-
-    }
-
-    public function removeDroppedObject($droppedObject){
-        unset($this->droppedObjects[array_search($droppedObject, $this->droppedObjects)]);
-        $this->droppedObjects = array_values($this->droppedObjects);
-    }
+        $object = $this->objectFactory->createDropped($name, $x, $y, $quantity);
+        if($object !== null){
+            $this->droppedObjects[] = $object;
+        }
+     }
 
     public function findUserByConnection($connection)
     {

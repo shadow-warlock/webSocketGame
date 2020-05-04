@@ -24,7 +24,7 @@ class  GameObject {
         ctx.closePath();
         ctx.fill();
         let img = new Image();   // Создает новый элемент img
-        img.src = "/assets/img/stone.png";
+        img.src = "/assets/img/"+this.name+".png";
         ctx.drawImage(img, this.coordinates.x-this.radius*Math.max(this.hp/this.maxHp, minSize), this.coordinates.y-this.radius*Math.max(this.hp/this.maxHp, minSize), this.radius*2*Math.max(this.hp/this.maxHp, minSize), this.radius*2*Math.max(this.hp/this.maxHp, minSize));
 
     }

@@ -2,7 +2,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/autoload.php';
 
-use WebSocketGame\User;
+use WebSocketGame\Model\User;
 use WebSocketGame\World;
 use Workerman\Timer;
 use Workerman\Worker;

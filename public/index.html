@@ -39,8 +39,11 @@
                             users.push(new User(data.data.users[i]));
                         }
                     }
-                    for (let i = 0; i < data.data.damagedObject.length; i++) {
-                        objects.push(new GameObject(data.data.damagedObject[i]));
+                    for (let i = 0; i < data.data.damagedObjects.length; i++) {
+                        objects.push(new GameObject(data.data.damagedObjects[i]));
+                    }
+                    for (let i = 0; i < data.data.droppedObjects.length; i++) {
+                        objects.push(new GameObject(data.data.droppedObjects[i]));
                     }
                     draw();
                     drawTop();
