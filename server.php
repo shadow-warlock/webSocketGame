@@ -20,36 +20,24 @@ $ws_worker->onWorkerStart = function () use (&$world) {
     });
 
     for ($i=0;$i<5;$i++){
-        $world->addStone();
+        $world->addDamagedObject("stone", 50, 200);
     };
 };
 
 $ws_worker->onMessage = function ($connection, $data) use (&$world) {
     $data = json_decode($data, true);
     if ($data["type"]==="move") {
-        foreach ($world->getUsers() as $user) {
-            if ($user->getConnection() === $connection) {
-                $user->move($data["data"]["horizontal"]*3,$data["data"]["vertical"]*3);
-                return;
-            }
-        }
+        $user=$world->findUserByConnection($connection);
+        $user->move($data["data"]["horizontal"]*3,$data["data"]["vertical"]*3);
+        return;
     }
     if($data["type"] === "melee") {
-        foreach($world->getUsers() as $attacking) {
-            if($attacking->getConnection() === $connection) {
-                if($attacking->meleeRadiusCheck($data["data"]["x"], $data["data"]["y"])) {
-                    foreach($world->getUsers() as $attacked) {
-                        if($attacking !== $attacked && $attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
-                            $attacking->dealingDamage($attacked);
-                            return;
-                        }
-                    }
-                    foreach($world->getStones() as $attacked) {
-                        if($attacking !== $attacked && $attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
-                            $attacking->dealingDamage($attacked);
-                            return;
-                        }
-                    }
+        $attacking = $world->findUserByConnection($connection);
+        if ($attacking->meleeRadiusCheck($data["data"]["x"], $data["data"]["y"])) {
+            foreach ($world->mergeObject() as $attacked) {
+                if ($attacking !== $attacked && $attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
+                    $attacking->dealingDamage($attacked);
+                    return;
                 }
             }
         }

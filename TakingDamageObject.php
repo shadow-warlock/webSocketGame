@@ -7,8 +7,8 @@ class TakingDamageObject extends GameObject{
     protected $maxHp;
     protected  $hp;
 
-    public function __construct($name, $radius, $hp, $x, $y){
-        parent::__construct($name, $radius, $x, $y);
+    public function __construct($name, $x, $y, $radius, $hp){
+        parent::__construct($name, $x, $y, $radius);
         $this->maxHp=$hp;
         $this->hp=$hp;
     }

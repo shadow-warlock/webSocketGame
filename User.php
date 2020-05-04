@@ -14,7 +14,7 @@ class User extends TakingDamageObject{
     public const COOLDOWN = 1000;
 
     public function __construct($connection, $login, $x, $y){
-        parent::__construct("user",20, 100, $x, $y);
+        parent::__construct("user", $x, $y,20, 100);
         $this->connection=$connection;
         $this->login=$login;
         $this->meleeRadius=50;
@@ -58,7 +58,7 @@ class User extends TakingDamageObject{
         return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],$this->meleeRadius);
     }
 
-    public function dealingDamage(GameObject $attacked): void{
+    public function dealingDamage(TakingDamageObject $attacked): void{
         $currentTime = (int) (microtime(true) * 1000);
         if($currentTime - $this->lastAttack < self::COOLDOWN){
             return;
