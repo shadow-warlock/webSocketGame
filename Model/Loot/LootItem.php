@@ -17,5 +17,10 @@ class LootItem
         $this->qualities = $qualities;
     }
 
-
+    public function generatingLoot() {
+        if (rand(0,100) < $this->chance*100) {
+            return ["item" => $this->item, "quality" => rand($this->qualities[0], $this->qualities[1])];
+        }
+        return null;
+    }
 }

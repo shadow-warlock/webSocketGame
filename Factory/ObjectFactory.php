@@ -9,13 +9,12 @@ use WebSocketGame\Model\Loot\LootItem;
 use WebSocketGame\Model\TakingDamageObject;
 
 class ObjectFactory {
-    public function create($type, $x, $y){
-        switch($type){
+    public function create($name, $x, $y){
+        switch($name){
             case "Stone":
                 $lootBox = new LootBox();
-                $lootBox->addItem(new LootItem("Stone", 0.5, [1, 10]));
-                return new TakingDamageObject($type, $x, $y, 50, 200, $lootBox);
-                break;
+                $lootBox->addItem(new LootItem("stone", 1.0, [3, 10]));
+                return new TakingDamageObject($name, $x, $y, 50, 200, $lootBox);
         }
         return null;
     }

@@ -6,8 +6,8 @@ namespace WebSocketGame\Model;
 class DroppedObject extends GameObject{
     private $quantity;
 
-    public function __construct($name, $radius, $quantity, $x, $y){
-        parent::__construct($name, $radius, $x, $y);
+    public function __construct($name, $x, $y, $radius, $quantity){
+        parent::__construct($name, $x, $y, $radius);
         $this->quantity=$quantity;
     }
 

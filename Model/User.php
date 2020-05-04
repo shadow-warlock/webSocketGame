@@ -3,6 +3,7 @@
 namespace WebSocketGame\Model;
 
 use WebSocketGame\Model\Loot\LootBox;
+use WebSocketGame\Utilities;
 
 class User extends TakingDamageObject{
 
@@ -48,13 +49,13 @@ class User extends TakingDamageObject{
         return Utilities::radiusCheck($x,$this->getCoordinates()["x"],$y,$this->getCoordinates()["y"],$this->meleeRadius);
     }
 
-    public function dealingDamage(TakingDamageObject $attacked): void{
+    public function dealingDamage(TakingDamageObject $attacked){
         $currentTime = (int) (microtime(true) * 1000);
         if($currentTime - $this->lastAttack < self::COOLDOWN){
-            return;
+            return TakingDamageObject::ALIVE;
         }
-        $attacked->takingDamage($this->generatingDamage());
         $this->lastAttack = $currentTime;
+        return $attacked->takingDamage($this->generatingDamage());
     }
 
     public function generatingDamage(): int{

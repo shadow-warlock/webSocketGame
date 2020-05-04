@@ -31,14 +31,7 @@ $ws_worker->onMessage = function ($connection, $data) use (&$world) {
     }
     if($data["type"] === "melee") {
         $attacking = $world->findUserByConnection($connection);
-        if ($attacking->meleeRadiusCheck($data["data"]["x"], $data["data"]["y"])) {
-            foreach ($world->mergeObject() as $attacked) {
-                if ($attacking !== $attacked && $attacked->radiusCheck($data["data"]["x"], $data["data"]["y"])) {
-                    $attacking->dealingDamage($attacked);
-                    return;
-                }
-            }
-        }
+        $world->melee($attacking, $data["data"]["x"], $data["data"]["y"]);
     }
 };
 
