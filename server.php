@@ -12,7 +12,7 @@ $world = new World();
 $ws_worker = new Worker("websocket://0.0.0.0:8000");
 $ws_worker->onWorkerStart = function () use (&$world) {
 
-    Timer::add(0.02, function() use  (&$world){
+    Timer::add(0.05, function() use  (&$world){
         $data = json_encode(["type" => "world", "data" => $world, "time" => (int) (microtime(true) * 1000)]);
         foreach ($world->getUsers() as $user) {
             $user->getConnection()->send($data);
@@ -23,8 +23,10 @@ $ws_worker->onWorkerStart = function () use (&$world) {
 $ws_worker->onMessage = function ($connection, $data) use (&$world) {
     $data = json_decode($data, true);
     if ($data["type"]==="move") {
-        $user=$world->findUserByConnection($connection);
-        $user->move($data["data"]["horizontal"]*3,$data["data"]["vertical"]*3);
+        $horizontal = $data["data"]["horizontal"] * 3;
+        $vertical = $data["data"]["vertical"] * 3;
+        $user = $world->findUserByConnection($connection);
+        $world->moveUser($user, $horizontal, $vertical);
         return;
     }
     if($data["type"] === "melee") {

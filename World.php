@@ -3,6 +3,10 @@
 namespace WebSocketGame;
 
 use JsonSerializable;
+use WebSocketGame\Factory\ObjectFactory;
+use WebSocketGame\Model\TakingDamageObject;
+use WebSocketGame\Model\User;
+use WebSocketGame\Validator\MoveValidator;
 
 class World implements JsonSerializable{
     private $width;
@@ -15,7 +19,7 @@ class World implements JsonSerializable{
          $this->width = 10000;
          $this->height = 10000;
          for ($i = 0; $i < 5; $i++) {
-             $this->addDamagedObject("stone", 50, 200);
+             $this->addDamagedObject("Stone");
          };
      }
 
@@ -28,6 +32,12 @@ class World implements JsonSerializable{
             "damagedObject" => $this->damagedObject];
     }
 
+    public function moveUser(User $user, $horizontal, $vertical){
+        if(MoveValidator::validateUserMove($this, $user, $horizontal, $vertical)){
+            $user->move($horizontal, $vertical);
+        }
+    }
+
     public function addUser($connection, $login){
         $this->users[]=new User($connection, $login, rand(0,$this->width), rand(0,$this->height));
     }
@@ -37,12 +47,16 @@ class World implements JsonSerializable{
         $this->users = array_values($this->users);
     }
 
-    public function addDamagedObject($name, $radius, $hp){
-        $this->damagedObject[]=new TakingDamageObject($name, rand(0,$this->width), rand(0,$this->height), $radius, $hp);
+    public function addDamagedObject($name){
+         $factory = new ObjectFactory();
+         $object = $factory->create($name, rand(0,$this->width), rand(0,$this->height));
+         if($object !== null){
+             $this->damagedObject[] = $object;
+         }
     }
 
     public function addDroppedObject($name, $radius, $hp){
-        $this->damagedObject[]=new TakingDamageObject($name, rand(0,$this->width), rand(0,$this->height), $radius, $hp);
+        $this->damagedObject[] = new TakingDamageObject($name, rand(0,$this->width), rand(0,$this->height), $radius, $hp);
     }
 
     public function findUserByConnection($connection)

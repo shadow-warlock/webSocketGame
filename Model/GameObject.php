@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WebSocketGame;
+namespace WebSocketGame\Model;
 
 use JsonSerializable;
 

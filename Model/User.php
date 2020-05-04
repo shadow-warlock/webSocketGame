@@ -1,6 +1,8 @@
 <?php
 
-namespace WebSocketGame;
+namespace WebSocketGame\Model;
+
+use WebSocketGame\Model\Loot\LootBox;
 
 class User extends TakingDamageObject{
 
@@ -14,7 +16,7 @@ class User extends TakingDamageObject{
     public const COOLDOWN = 1000;
 
     public function __construct($connection, $login, $x, $y){
-        parent::__construct("user", $x, $y,20, 100);
+        parent::__construct("user", $x, $y,20, 100, new LootBox());
         $this->connection=$connection;
         $this->login=$login;
         $this->meleeRadius=50;
@@ -40,18 +42,6 @@ class User extends TakingDamageObject{
         $this->lastMove = $currentTime;
         $this->coordinates["x"] = $this->coordinates["x"]+$x;
         $this->coordinates["y"] = $this->coordinates["y"]+$y;
-        if($this->coordinates["x"] < 0){
-            $this->coordinates["x"] = 1000 + $this->coordinates["x"];
-        }
-        if($this->coordinates["x"] > 1000){
-            $this->coordinates["x"] = 0 + $this->coordinates["x"]%1000;
-        }
-        if($this->coordinates["y"] < 0){
-            $this->coordinates["y"] = 1000 + $this->coordinates["y"];
-        }
-        if($this->coordinates["y"] > 1000){
-            $this->coordinates["y"] = 0 + $this->coordinates["y"]%1000;
-        }
     }
 
     public function meleeRadiusCheck($x,$y): bool{

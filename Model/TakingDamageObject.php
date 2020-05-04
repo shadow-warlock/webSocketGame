@@ -1,18 +1,19 @@
 <?php
 
 
-namespace WebSocketGame;
+namespace WebSocketGame\Model;
+
 
 class TakingDamageObject extends GameObject{
     protected $maxHp;
     protected  $hp;
-    protected $loot;
-    protected $lootQuantity = [];
+    protected $lootBox;
 
-    public function __construct($name, $x, $y, $radius, $hp){
+    public function __construct($name, $x, $y, $radius, $hp, $lootBox){
         parent::__construct($name, $x, $y, $radius);
         $this->maxHp=$hp;
         $this->hp=$hp;
+        $this->lootBox = $lootBox;
     }
 
     public function jsonSerialize() {
