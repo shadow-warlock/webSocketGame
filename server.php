@@ -18,10 +18,6 @@ $ws_worker->onWorkerStart = function () use (&$world) {
             $user->getConnection()->send($data);
         }
     });
-
-    for ($i=0;$i<100;$i++){
-        $world->addDamagedObject("stone", 50, 200);
-    };
 };
 
 $ws_worker->onMessage = function ($connection, $data) use (&$world) {

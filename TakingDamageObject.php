@@ -6,6 +6,8 @@ namespace WebSocketGame;
 class TakingDamageObject extends GameObject{
     protected $maxHp;
     protected  $hp;
+    protected $loot;
+    protected $lootQuantity = [];
 
     public function __construct($name, $x, $y, $radius, $hp){
         parent::__construct($name, $x, $y, $radius);
@@ -23,8 +25,9 @@ class TakingDamageObject extends GameObject{
         if ($this->hp>$damage){
             $this->hp = $this->hp-$damage;
         }
-        else
+        else {
             $this->hp = 0;
+        }
     }
 
     public function getHp(): int{

@@ -12,15 +12,19 @@ class World implements JsonSerializable{
     private $droppedObject = [];
 
      public function __construct(){
-        $this->width=10000;
-        $this->height=10000;
-    }
+         $this->width = 10000;
+         $this->height = 10000;
+         for ($i = 0; $i < 5; $i++) {
+             $this->addDamagedObject("stone", 50, 200);
+         };
+     }
 
     public function jsonSerialize() {
         return [
             "width" => $this->width,
             "height" => $this->height,
             "users" => $this->users,
+            "droppedObject" => $this->droppedObject,
             "damagedObject" => $this->damagedObject];
     }
 
