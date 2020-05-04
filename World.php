@@ -21,7 +21,7 @@ class World implements JsonSerializable{
             "width" => $this->width,
             "height" => $this->height,
             "users" => $this->users,
-            "damaged object" => $this->damagedObject];
+            "damagedObject" => $this->damagedObject];
     }
 
     public function addUser($connection, $login){

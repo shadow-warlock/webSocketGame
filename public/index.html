@@ -9,16 +9,9 @@
     <script>
 
         let ws;
-        function openWS() {
+        function init() {
             ws = new WebSocket("ws://192.168.1.40:8000?user=" + $('#nick').val());
-            $('#main_block').show();
-            $('#login_form').hide();
-            canvas = document.getElementById('canvas');
-            topCanvas = document.getElementById('top_canvas');
-            canvas.width = window.innerWidth * 0.9; //document.width is obsolete
-            canvas.height = window.innerHeight * 0.85; //document.height is obsolete
-            topCanvas.width = window.innerWidth * 0.9; //document.width is obsolete
-            topCanvas.height = window.innerHeight * 0.1; //document.height is obsolete
+            initScene();
             ws.onmessage = function (evt) {
                 let data = JSON.parse(evt.data);
                 if (data.type === "world") {
@@ -40,19 +33,30 @@
                             if(player.hp === 0){
                                 alert("Вы погибли, нажмите ОК для воскрешения!");
                                 ws.close();
-                                openWS();
+                                init();
                             }
                         } else {
                             users.push(new User(data.data.users[i]));
                         }
                     }
-                    for (let i = 0; i < data.data.stones.length; i++) {
-                        objects.push(new GameObject(data.data.stones[i]));
+                    for (let i = 0; i < data.data.damagedObject.length; i++) {
+                        objects.push(new GameObject(data.data.damagedObject[i]));
                     }
                     draw();
                     drawTop();
                 }
             };
+        }
+
+        function initScene() {
+            $('#main_block').show();
+            $('#login_form').hide();
+            canvas = document.getElementById('canvas');
+            topCanvas = document.getElementById('top_canvas');
+            canvas.width = window.innerWidth * 0.9; //document.width is obsolete
+            canvas.height = window.innerHeight * 0.85; //document.height is obsolete
+            topCanvas.width = window.innerWidth * 0.9; //document.width is obsolete
+            topCanvas.height = window.innerHeight * 0.1; //document.height is obsolete
         }
 
         $(document).ready(function () {
@@ -66,7 +70,7 @@
     <label>Введи никнейм
         <input id="nick"/>
     </label>
-    <button id="connect" onclick="openWS()">connect</button>
+    <button id="connect" onclick="init()">connect</button>
 </div>
 <div id="main_block" style="display: none">
     <div style="width: 100%; display: flex; flex-direction: column">

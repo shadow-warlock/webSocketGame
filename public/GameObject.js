@@ -3,6 +3,11 @@ const minSize = 0.3;
 class  GameObject {
     constructor(data) {
         Object.assign(this, data);
+        this.color = {
+            r: 123,
+            g: 123,
+            b: 123
+        };
     }
 
     draw(ctx){

@@ -1,6 +1,11 @@
 class  User {
     constructor(data) {
         Object.assign(this, data);
+        this.color = {
+            r: 123,
+            g: 12,
+            b: 14
+        };
     }
 
     drawRIP(ctx){

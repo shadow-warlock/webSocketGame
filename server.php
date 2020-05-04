@@ -7,7 +7,7 @@ use WebSocketGame\World;
 use Workerman\Timer;
 use Workerman\Worker;
 
-$world = new World;
+$world = new World();
 
 $ws_worker = new Worker("websocket://0.0.0.0:8000");
 $ws_worker->onWorkerStart = function () use (&$world) {
@@ -19,7 +19,7 @@ $ws_worker->onWorkerStart = function () use (&$world) {
         }
     });
 
-    for ($i=0;$i<5;$i++){
+    for ($i=0;$i<100;$i++){
         $world->addDamagedObject("stone", 50, 200);
     };
 };
@@ -48,16 +48,12 @@ $ws_worker->onConnect = function ($connection) use (&$world) {
     $connection->onWebSocketConnect = function ($connection) use (&$world) {
         $world->addUser($connection, $_GET['user']);
     };
-    $connection->onClose = function($connection) use (&$world)
-    {
-        // удаляем параметр при отключении пользователя
-        $user = array_search($connection, array_map(function(User $user){return $user->getConnection();}, $world->getUsers()));
-        echo $user;
-        $world->removeUser($user);
-    };
 };
 
 $ws_worker->onClose = function ($connection) use (&$world) {
+    // удаляем параметр при отключении пользователя
+    $user = array_search($connection, array_map(function(User $user){return $user->getConnection();}, $world->getUsers()));
+    $world->removeUser($user);
 };
 
 // Run worker
