@@ -4,6 +4,7 @@ namespace WebSocketGame;
 
 use JsonSerializable;
 use WebSocketGame\Factory\ObjectFactory;
+use WebSocketGame\Model\GameObject;
 use WebSocketGame\Model\TakingDamageObject;
 use WebSocketGame\Model\User;
 use WebSocketGame\Validator\MoveValidator;
@@ -28,6 +29,19 @@ class World implements JsonSerializable{
              }
          }
      }
+
+    public function getRangedData(User $user) {
+         $filterFunc = function(GameObject $obj)use($user){
+             return Utilities::radiusCheck($obj->getCoordinates()["x"], $user->getCoordinates()["x"], $obj->getCoordinates()["y"], $user->getCoordinates()["y"], 1000);
+         };
+        return [
+            "width" => $this->width,
+            "height" => $this->height,
+            "users" => $this->users,
+            "droppedObjects" => array_filter($this->droppedObjects, $filterFunc),
+            "damagedObjects" => array_filter($this->damagedObjects, $filterFunc)
+        ];
+    }
 
     public function jsonSerialize() {
         return [

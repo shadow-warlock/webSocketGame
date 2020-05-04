@@ -4,7 +4,7 @@
     "hp": 200,
     "lootBox":{
       "stone":{
-        "chance": 0.5,
+        "chance": 1,
         "quantities": [1, 10]
       }
     }
@@ -14,7 +14,7 @@
     "hp": 200,
     "lootBox":{
       "wood":{
-        "chance": 0.5,
+        "chance": 1,
         "quantities": [1, 10]
       }
     }
