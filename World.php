@@ -5,6 +5,7 @@ namespace WebSocketGame;
 use JsonSerializable;
 use WebSocketGame\Factory\ObjectFactory;
 use WebSocketGame\Model\GameObject;
+use WebSocketGame\Model\Loot\LootItem;
 use WebSocketGame\Model\TakingDamageObject;
 use WebSocketGame\Model\User;
 use WebSocketGame\Validator\MoveValidator;
@@ -92,8 +93,9 @@ class World implements JsonSerializable{
         }
     }
 
-    public function takeObject($taking,$taked){
-        $this->removeDroppedObject($taked);
+    public function takeObject(User $taking, LootItem $taked){
+         $taking->takingObject($taked->generatingLoot()["name"], $taked->generatingLoot()["quantity"]);
+         $this->removeDroppedObject($taked);
     }
 
     public function addUser($connection, $login){

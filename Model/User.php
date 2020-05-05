@@ -2,6 +2,8 @@
 
 namespace WebSocketGame\Model;
 
+use WebSocketGame\Model\Inventory\Inventory;
+use WebSocketGame\Model\Inventory\InventoryItem;
 use WebSocketGame\Model\Loot\LootBox;
 use WebSocketGame\Model\Loot\LootItem;
 use WebSocketGame\Utilities;
@@ -13,6 +15,7 @@ class User extends TakingDamageObject{
     public $meleeRadius;
     private $exp;
     private $damage = [];
+    private Inventory $inventory;
     private $lastMove = 0;
     private $lastAttack = 0;
     public const COOLDOWN = 1000;
@@ -20,6 +23,7 @@ class User extends TakingDamageObject{
     public function __construct($connection, $login, $x, $y){
         $lootBox = new LootBox();
         $lootBox->addItem(new LootItem("gold", 0.9, [3,30]));
+        $inventory = new Inventory();
         parent::__construct("User", $x, $y,20, 100, new LootBox(), 100);
         $this->connection=$connection;
         $this->login=$login;
@@ -34,8 +38,13 @@ class User extends TakingDamageObject{
             "meleeRadius" => $this->meleeRadius,
             "exp" => $this->exp,
             "damage" => $this->damage,
+            "inventory" => $this->inventory,
             "lastAttack" => $this->lastAttack,
             "cooldown" => self::COOLDOWN]);
+    }
+
+    public function takingObject ($name, $quantity){
+        $this->inventory->addItem(new InventoryItem($name, $quantity));
     }
 
     public function move($x,$y): void{
