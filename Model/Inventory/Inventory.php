@@ -12,6 +12,10 @@ class Inventory
         }
     }
 
+    public function jsonSerialize() {
+        return $this->items;
+    }
+
     public function checkNewItem(InventoryItem $newItem): bool {
         foreach ($this->items as $item) {
             if ($item["name"] == $newItem["name"]){

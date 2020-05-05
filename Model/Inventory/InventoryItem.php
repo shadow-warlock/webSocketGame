@@ -13,6 +13,10 @@ class InventoryItem
         $this->quantity = $quantity;
     }
 
+    public function jsonSerialize() {
+        return $this->getItem();
+    }
+
     public function getItem()
     {
         return ["name" => $this->name, "quantity" => $this->quantity];
