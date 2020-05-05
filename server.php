@@ -36,6 +36,9 @@ $ws_worker->onMessage = function ($connection, $data) use (&$world) {
     if($data["type"] === "melee") {
         $world->melee($user, $data["data"]["x"], $data["data"]["y"]);
     }
+    if($data["type"] === "useItem") {
+        $world->useUserItem($user, $data["data"]["position"]);
+    }
 };
 
 $ws_worker->onConnect = function ($connection) use (&$world) {

@@ -1,3 +1,5 @@
+let itemsOnLine = 5;
+
 class  Player extends User{
     constructor(data, socket) {
         super(data);
@@ -22,6 +24,13 @@ class  Player extends User{
         ws.send(JSON.stringify({type: "melee", data: {x: x, y: y}}));
     }
 
+    use(x, y){
+        let w = inventoryCanvas.clientWidth/itemsOnLine;
+        let h = w;
+        let position = parseInt(x/w)%itemsOnLine + parseInt((y-20)/h)*itemsOnLine;
+        ws.send(JSON.stringify({type: "useItem", data: {"position": position}}));
+    }
+
     draw(ctx, time) {
         super.draw(ctx);
         ctx.fillStyle = "rgb(" +
@@ -36,7 +45,6 @@ class  Player extends User{
     }
 
     drawInventory(ctx, time) {
-        let itemsOnLine = 4;
         let w = ctx.canvas.clientWidth/itemsOnLine;
         let h = w;
         ctx.font = parseInt(5 + 30/itemsOnLine) + "pt Arial";

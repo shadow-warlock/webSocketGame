@@ -94,8 +94,12 @@ class World implements JsonSerializable{
         }
     }
 
+    public function useUserItem(User $user, $position){
+        $user->useItem($position);
+    }
+
     public function takeObject(User $taking, DroppedObject $taked){
-         $taking->takingObject($taked->getName(), $taked->getQuantity(), $taked->getMaxQuantity());
+         $taking->takingObject($this->objectFactory->generateInventoryItem($taked));
          $this->removeDroppedObject($taked);
     }
 
@@ -124,7 +128,6 @@ class World implements JsonSerializable{
         $objects = $this->objectFactory->createDropped($name, $x, $y, $radius, $quantity);
         if($objects !== null){
             $this->droppedObjects = array_merge($this->droppedObjects, $objects);
-            print_r($this->droppedObjects);
         }
      }
 

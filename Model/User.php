@@ -2,6 +2,7 @@
 
 namespace WebSocketGame\Model;
 
+use WebSocketGame\Model\Inventory\Effect;
 use WebSocketGame\Model\Inventory\Inventory;
 use WebSocketGame\Model\Inventory\InventoryItem;
 use WebSocketGame\Model\Loot\LootBox;
@@ -43,8 +44,22 @@ class User extends TakingDamageObject{
             "cooldown" => self::COOLDOWN]);
     }
 
-    public function takingObject ($name, $quantity, $maxQuantity){
-        $this->inventory->addItem(new InventoryItem($name, $quantity, $maxQuantity));
+    public function heal($hp){
+        $this->hp = min($this->hp + $hp, $this->maxHp);
+    }
+    public function teleportation($x, $y){
+        $this->coordinates = [
+            "x" => $x,
+            "y" => $y
+        ];
+    }
+
+    public function takingObject (InventoryItem $item){
+        $this->inventory->addItem($item);
+    }
+
+    public function useItem ($position){
+        $this->inventory->getItems()[$position]->use($this);
     }
 
     public function move($x,$y): void{

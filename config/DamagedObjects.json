@@ -21,7 +21,11 @@
     "lootBox":{
       "wood":{
         "chance": 1,
-        "quantities": [1, 10]
+        "quantities": [1, 3]
+      },
+      "apple":{
+        "chance": 0.5,
+        "quantities": [1, 3]
       }
     }
   }

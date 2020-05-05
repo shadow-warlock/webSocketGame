@@ -5,6 +5,8 @@ namespace WebSocketGame\Factory;
 
 
 use WebSocketGame\Model\DroppedObject;
+use WebSocketGame\Model\Inventory\Effect;
+use WebSocketGame\Model\Inventory\InventoryItem;
 use WebSocketGame\Model\Loot\LootBox;
 use WebSocketGame\Model\Loot\LootItem;
 use WebSocketGame\Model\TakingDamageObject;
@@ -34,10 +36,7 @@ class ObjectFactory {
         $json = file_get_contents(__DIR__ . "/../config/DroppedObjects.json");
         $config = json_decode($json, true);
         foreach($config as $objName => $data){
-            $this->droppedObjects[$objName] = [
-                'radius' => $data['radius'],
-                'maxQuantity' => $data['maxQuantity'],
-            ];
+            $this->droppedObjects[$objName] = $data;
         }
     }
 
@@ -64,5 +63,19 @@ class ObjectFactory {
             return $objects;
         }
         return null;
+    }
+
+    public function generateInventoryItem(DroppedObject $object){
+        $droppedInfo = $this->droppedObjects[$object->getName()];
+        $isUsed = isset($droppedInfo["use"]);
+        if($isUsed){
+            $useCount = $droppedInfo["use"]["count"];
+            $effects = [];
+            foreach($droppedInfo["use"]["effects"] as $parameter => $value){
+                $effects[] = new Effect($parameter, $value);
+            }
+            return new InventoryItem($object, $isUsed, $effects, $useCount);
+        }
+        return new InventoryItem($object, $isUsed);
     }
 }

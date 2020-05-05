@@ -44,6 +44,7 @@ function onPlayerCreate() {
         press(event, false);
     });
     canvas.addEventListener('mousedown', attack);
+    inventoryCanvas.addEventListener('mousedown', inventoryUse);
     setInterval(() => {
         player.work();
     }, 50);
@@ -75,5 +76,17 @@ function attack(event) {
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
         player.attack(x + player.coordinates.x - canvas.width/2, y + player.coordinates.y - canvas.height/2);
+    }
+}
+
+function inventoryUse(event) {
+    if (event.button === 0) {
+        let x = event.clientX + document.body.scrollLeft +
+            document.documentElement.scrollLeft;
+        let y = event.clientY + document.body.scrollTop +
+            document.documentElement.scrollTop;
+        x -= canvas.offsetLeft;
+        y -= canvas.offsetTop;
+        player.use(x, y);
     }
 }
