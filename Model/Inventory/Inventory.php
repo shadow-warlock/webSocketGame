@@ -9,23 +9,33 @@ class Inventory implements JsonSerializable
     private $items = [];
 
     public function addItem(InventoryItem $newItem){
-        if ($this->checkNewItem($newItem)){
-            $this->items[] = $newItem;
+        foreach ($this->checkNewItem($newItem) as $item) {
+            if ($newItem->getQuantity() > 0) {
+                if (($item->getQuantity() + $newItem->getQuantity()) <= $item->getMaxQuantity()) {
+                    $item->changeQuantity($newItem->getQuantity());
+                    return;
+                } else {
+                    $newItem->changeQuantity(-($item->getMaxQuantity() - $item->getQuantity()));
+                    $item->changeQuantity($item->getMaxQuantity() - $item->getQuantity());
+                }
+            }
+            else return;
         }
+        $this->items[] = $newItem;
     }
 
     public function jsonSerialize() {
         return $this->items;
     }
 
-    public function checkNewItem(InventoryItem $newItem): bool {
+    public function checkNewItem(InventoryItem $newItem) {
+        $notFullItems = [];
         foreach ($this->items as $item) {
             if (($item->getName() == $newItem->getName()) && ($item->getQuantity() < $item->getMaxQuantity())){
-                $item->addQuantity($newItem->getQuantity());
-                return false;
+                $notFullItems[] = $item;
             }
         }
-        return true;
+        return $notFullItems;
     }
 
     public function getItems(): array
