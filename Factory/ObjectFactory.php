@@ -25,6 +25,7 @@ class ObjectFactory {
             }
             $this->damagedObjects[$objName] = [
                 'radius' => $data['radius'],
+                'givesExp' => $data['givesExp'],
                 "hp" => $data['hp'],
                 "lootBox" => $lootBox
             ];
@@ -41,7 +42,7 @@ class ObjectFactory {
     public function create($name, $x, $y){
         if(isset($this->damagedObjects[$name])){
             $data = $this->damagedObjects[$name];
-            return new TakingDamageObject($name, $x, $y, $data['radius'], $data['hp'], $data["lootBox"]);
+            return new TakingDamageObject($name, $x, $y, $data['radius'], $data['hp'], $data["lootBox"], $data["givesExp"]);
         }
         return null;
     }
