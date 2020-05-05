@@ -30,7 +30,7 @@ class User extends TakingDamageObject{
         $this->login=$login;
         $this->meleeRadius=50;
         $this->exp=0;
-        $this->damage=[100,200];
+        $this->damage=[10,30];
     }
 
     public function jsonSerialize() {

@@ -1,7 +1,7 @@
 {
   "Stone":{
     "radius": 50,
-    "hp": 200,
+    "hp": 100,
     "givesExp": 20,
     "lootBox":{
       "stone":{
@@ -11,12 +11,16 @@
       "gold":{
         "chance": 1,
         "quantities": [1, 10]
+      },
+      "teleportationStone": {
+        "chance": 0.1,
+        "quantities": [1, 1]
       }
     }
   },
   "Wood":{
     "radius": 50,
-    "hp": 200,
+    "hp": 100,
     "givesExp": 20,
     "lootBox":{
       "wood":{

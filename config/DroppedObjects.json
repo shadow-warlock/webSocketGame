@@ -9,13 +9,7 @@
   },
   "gold":{
     "radius": 20,
-    "maxQuantity": 100,
-    "use": {
-      "count": 5,
-      "effects": {
-        "teleportation": [5000, 5000]
-      }
-    }
+    "maxQuantity": 100
   },
   "apple":{
     "radius": 20,
@@ -24,6 +18,16 @@
       "count": 1,
       "effects": {
         "heal": [10]
+      }
+    }
+  },
+  "teleportationStone":{
+    "radius": 20,
+    "maxQuantity": 100,
+    "use": {
+      "count": 0,
+      "effects": {
+        "teleportation": [5000, 5000]
       }
     }
   }
