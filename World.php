@@ -64,7 +64,7 @@ class World implements JsonSerializable{
             foreach ($this->users as $attacked) {
                 if ($attacking !== $attacked && $attacked->radiusCheck($x, $y)) {
                     if ($attacking->dealingDamage($attacked) == TakingDamageObject::DEAD){
-
+                        $this->removeUser($attacked);
                     }
                     return;
                 }
@@ -90,7 +90,7 @@ class World implements JsonSerializable{
     }
 
     public function takeObject($taking,$taked){
-
+        $this->removeDroppedObject($taked);
     }
 
     public function addUser($connection, $login){
@@ -120,6 +120,11 @@ class World implements JsonSerializable{
             $this->droppedObjects[] = $object;
         }
      }
+
+    public function removeDroppedObject($droppedObject){
+        unset($this->droppedObjects[array_search($droppedObject, $this->droppedObjects)]);
+        $this->droppedObjects = array_values($this->droppedObjects);
+    }
 
     public function findUserByConnection($connection)
     {
