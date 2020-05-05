@@ -17,7 +17,7 @@ class User extends TakingDamageObject{
     public const COOLDOWN = 1000;
 
     public function __construct($connection, $login, $x, $y){
-        parent::__construct("user", $x, $y,20, 100, new LootBox());
+        parent::__construct("user", $x, $y,20, 100, new LootBox(), 100);
         $this->connection=$connection;
         $this->login=$login;
         $this->meleeRadius=50;
@@ -41,8 +41,8 @@ class User extends TakingDamageObject{
             return;
         }
         $this->lastMove = $currentTime;
-        $this->coordinates["x"] = $this->coordinates["x"]+$x;
-        $this->coordinates["y"] = $this->coordinates["y"]+$y;
+        $this->coordinates["x"] = intval($this->coordinates["x"]+ $x * (1 + $this->exp/100));
+        $this->coordinates["y"] = intval($this->coordinates["y"] + $y * (1 + $this->exp/100));
     }
 
     public function meleeRadiusCheck($x,$y): bool{
@@ -55,7 +55,15 @@ class User extends TakingDamageObject{
             return TakingDamageObject::ALIVE;
         }
         $this->lastAttack = $currentTime;
-        return $attacked->takingDamage($this->generatingDamage());
+        $isDead = $attacked->takingDamage($this->generatingDamage());
+        if($isDead == self::DEAD){
+            $this->addExp($attacked->givesExp);
+        }
+        return $isDead;
+    }
+
+    public function addExp($exp){
+        $this->exp += $exp;
     }
 
     public function generatingDamage(): int{

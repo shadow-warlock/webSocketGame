@@ -2,6 +2,7 @@
   "Stone":{
     "radius": 50,
     "hp": 200,
+    "givesExp": 10,
     "lootBox":{
       "stone":{
         "chance": 1,
@@ -12,6 +13,7 @@
   "Wood":{
     "radius": 50,
     "hp": 200,
+    "givesExp": 10,
     "lootBox":{
       "wood":{
         "chance": 1,

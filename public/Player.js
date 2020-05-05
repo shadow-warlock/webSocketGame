@@ -38,12 +38,13 @@ class  Player extends User{
     drawTop(ctx, time) {
         ctx.font = "15px Arial";
         ctx.fillStyle = "black";
-        ctx.fillText(this.login + " " + this.hp, 25, 25);
+        ctx.fillText(this.login + " " + this.hp, 25, 15);
+        ctx.fillText("Квадрат: " + parseInt(this.coordinates.x/500, 10) + ":" + parseInt(this.coordinates.y/500, 10), 25, 30);
         ctx.beginPath();
-        ctx.strokeStyle = "red";
+        ctx.strokeStyle = "green";
         ctx.lineWidth = 10;
-        ctx.moveTo(100, 25);
-        ctx.lineTo(100 + (300/this.maxHp*this.hp), 25);
+        ctx.moveTo(150, 25);
+        ctx.lineTo(150 + (300/1000*this.exp), 25);
         ctx.stroke();
     }
 }

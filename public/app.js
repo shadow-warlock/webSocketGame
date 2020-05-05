@@ -10,9 +10,9 @@ function draw() {
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "rgb(80, 220, 100)";
-    ctx.fillRect(0,0, canvas.width, canvas.height);
     ctx.save();
     ctx.translate(-player.coordinates.x + canvas.width/2, -player.coordinates.y + canvas.height/2);
+    ctx.fillRect(0,0, world.width, world.height);
     for (let i = 0; i < objects.length; i++) {
         objects[i].draw(ctx);
     }

@@ -8,14 +8,16 @@ use WebSocketGame\Model\Loot\LootBox;
 
 class TakingDamageObject extends GameObject{
     protected $maxHp;
-    protected  $hp;
+    protected $hp;
     protected LootBox $lootBox;
+    protected $givesExp;
     public const ALIVE = "alive";
     public const DEAD = "dead";
 
-    public function __construct($name, $x, $y, $radius, $hp, $lootBox){
+    public function __construct($name, $x, $y, $radius, $hp, $lootBox, $givesExp){
         parent::__construct($name, $x, $y, $radius);
         $this->maxHp=$hp;
+        $this->givesExp = $givesExp;
         $this->hp=$hp;
         $this->lootBox = $lootBox;
     }
