@@ -71,7 +71,6 @@ class World implements JsonSerializable{
                         }
 //                        $this->removeUser($attacked);
                     }
-                    return;
                 }
             }
             foreach ($this->damagedObjects as $attacked) {
@@ -82,16 +81,16 @@ class World implements JsonSerializable{
                         }
                         $this->removeDamagedObject($attacked);
                     }
-                    return;
                 }
             }
             foreach ($this->droppedObjects as $attacked) {
                 if ($attacking !== $attacked && $attacked->radiusCheck($x, $y)) {
                     $this->takeObject($attacking,$attacked);
-                    return;
                 }
+                return;
             }
         }
+        return;
     }
 
     public function takeObject(User $taking, DroppedObject $taked){

@@ -28,7 +28,7 @@ class InventoryItem implements JsonSerializable
         return $this->quantity;
     }
 
-    public function addQuantity($added) {
+    public function changeQuantity($added) {
         $this->quantity += $added;
     }
 
