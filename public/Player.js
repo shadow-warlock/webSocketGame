@@ -36,13 +36,16 @@ class  Player extends User{
     }
 
     drawInventory(ctx, time) {
-        let w = ctx.canvas.clientWidth/2;
+        let itemsOnLine = 4;
+        let w = ctx.canvas.clientWidth/itemsOnLine;
         let h = w;
+        ctx.font = parseInt(5 + 30/itemsOnLine) + "pt Arial";
+        ctx.fillStyle = "black";
         for(let i = 0; i < this.inventory.length; i++){
-            let x = i % 2 ? 0 : w;
-            let y = i / 2 * h;
+            let x = i % itemsOnLine * w;
+            let y = parseInt(i / itemsOnLine) * h + 20;
             ctx.drawImage(makeImage(this.inventory[i].name), x, y, w, h);
-            ctx.fillText(this.inventory[i].quantity, x, y);
+            ctx.fillText(this.inventory[i].quantity, x, y + parseInt(5 + 30/itemsOnLine));
         }
 
     }

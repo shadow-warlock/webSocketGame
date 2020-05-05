@@ -20,7 +20,7 @@ class Inventory implements JsonSerializable
 
     public function checkNewItem(InventoryItem $newItem): bool {
         foreach ($this->items as $item) {
-            if (($item->getName() == $newItem->getName()) && ($item["quantity"] <= $item["maxQuantity"])){
+            if (($item->getName() == $newItem->getName()) && ($item->getQuantity() <= $item->getMaxQuantity())){
                 $item->addQuantity($newItem->getQuantity());
                 return false;
             }
