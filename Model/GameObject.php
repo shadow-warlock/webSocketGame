@@ -36,12 +36,12 @@ class GameObject implements JsonSerializable{
         return $this->coordinates;
     }
 
-    /**
-     * @return mixed
-     */
     public function getName() {
         return $this->name;
     }
 
-
+    public function getRadius()
+    {
+        return $this->radius;
+    }
 }
