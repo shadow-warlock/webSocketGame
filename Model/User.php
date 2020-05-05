@@ -3,6 +3,7 @@
 namespace WebSocketGame\Model;
 
 use WebSocketGame\Model\Loot\LootBox;
+use WebSocketGame\Model\Loot\LootItem;
 use WebSocketGame\Utilities;
 
 class User extends TakingDamageObject{
@@ -17,7 +18,9 @@ class User extends TakingDamageObject{
     public const COOLDOWN = 1000;
 
     public function __construct($connection, $login, $x, $y){
-        parent::__construct("user", $x, $y,20, 100, new LootBox(), 100);
+        $lootBox = new LootBox();
+        $lootBox->addItem(new LootItem("gold", 0.9, [3,30]));
+        parent::__construct("User", $x, $y,20, 100, new LootBox(), 100);
         $this->connection=$connection;
         $this->login=$login;
         $this->meleeRadius=50;

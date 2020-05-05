@@ -9,7 +9,7 @@ use WebSocketGame\Model\Loot\LootBox;
 class TakingDamageObject extends GameObject{
     protected $maxHp;
     protected $hp;
-    protected LootBox $lootBox;
+    protected $lootBox;
     protected $givesExp;
     public const ALIVE = "alive";
     public const DEAD = "dead";

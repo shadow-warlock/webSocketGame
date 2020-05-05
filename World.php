@@ -64,6 +64,9 @@ class World implements JsonSerializable{
             foreach ($this->users as $attacked) {
                 if ($attacking !== $attacked && $attacked->radiusCheck($x, $y)) {
                     if ($attacking->dealingDamage($attacked) == TakingDamageObject::DEAD){
+                        foreach ($attacked->droppingLoot() as $droppedItem){
+                            $this->addDroppedObject($droppedItem["item"], $droppedItem["x"], $droppedItem["y"], $droppedItem["quantity"]);
+                        }
                         $this->removeUser($attacked);
                     }
                     return;
