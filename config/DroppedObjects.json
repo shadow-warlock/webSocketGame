@@ -1,11 +1,14 @@
 {
   "stone":{
-    "radius": 20
+    "radius": 20,
+    "maxQuantity": 50
   },
   "wood":{
-    "radius": 20
+    "radius": 20,
+    "maxQuantity": 50
   },
   "gold":{
-    "radius": 20
+    "radius": 20,
+    "maxQuantity": 100
   }
 }

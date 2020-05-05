@@ -67,7 +67,7 @@ class World implements JsonSerializable{
                 if ($attacking !== $attacked && $attacked->radiusCheck($x, $y)) {
                     if ($attacking->dealingDamage($attacked) == TakingDamageObject::DEAD){
                         foreach ($attacked->droppingLoot() as $droppedItem){
-                            $this->addDroppedObject($droppedItem["item"], $droppedItem["x"], $droppedItem["y"], $droppedItem["quantity"]);
+                            $this->addDroppedObject($droppedItem["item"], $droppedItem["x"], $droppedItem["y"], $droppedItem["radius"], $droppedItem["quantity"]);
                         }
 //                        $this->removeUser($attacked);
                     }
@@ -78,7 +78,7 @@ class World implements JsonSerializable{
                 if ($attacking !== $attacked && $attacked->radiusCheck($x, $y)) {
                     if ($attacking->dealingDamage($attacked) == TakingDamageObject::DEAD){
                         foreach ($attacked->droppingLoot() as $droppedItem){
-                            $this->addDroppedObject($droppedItem["item"], $droppedItem["x"], $droppedItem["y"], $droppedItem["quantity"]);
+                            $this->addDroppedObject($droppedItem["item"], $droppedItem["x"], $droppedItem["y"], $droppedItem["radius"], $droppedItem["quantity"]);
                         }
                         $this->removeDamagedObject($attacked);
                     }
@@ -95,7 +95,7 @@ class World implements JsonSerializable{
     }
 
     public function takeObject(User $taking, DroppedObject $taked){
-         $taking->takingObject($taked->getName(), $taked->getQuantity());
+         $taking->takingObject($taked->getName(), $taked->getQuantity(), $taked->getMaxQuantity());
          $this->removeDroppedObject($taked);
     }
 
@@ -120,10 +120,11 @@ class World implements JsonSerializable{
         $this->damagedObjects = array_values($this->damagedObjects);
     }
 
-    public function addDroppedObject($name, $x, $y, $quantity){
-        $object = $this->objectFactory->createDropped($name, $x, $y, $quantity);
-        if($object !== null){
-            $this->droppedObjects[] = $object;
+    public function addDroppedObject($name, $x, $y, $radius, $quantity){
+        $objects = $this->objectFactory->createDropped($name, $x, $y, $radius, $quantity);
+        if($objects !== null){
+            $this->droppedObjects = array_merge($this->droppedObjects, $objects);
+            print_r($this->droppedObjects);
         }
      }
 

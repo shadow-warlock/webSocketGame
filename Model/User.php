@@ -15,7 +15,7 @@ class User extends TakingDamageObject{
     public $meleeRadius;
     private $exp;
     private $damage = [];
-    private Inventory $inventory;
+    private $inventory;
     private $lastMove = 0;
     private $lastAttack = 0;
     public const COOLDOWN = 1000;
@@ -43,8 +43,8 @@ class User extends TakingDamageObject{
             "cooldown" => self::COOLDOWN]);
     }
 
-    public function takingObject ($name, $quantity){
-        $this->inventory->addItem(new InventoryItem($name, $quantity));
+    public function takingObject ($name, $quantity, $maxQuantity){
+        $this->inventory->addItem(new InventoryItem($name, $quantity, $maxQuantity));
     }
 
     public function move($x,$y): void{

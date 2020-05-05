@@ -40,14 +40,15 @@ class TakingDamageObject extends GameObject{
     }
 
     public function droppingLoot(){
-        return array_map(function ($item){return array_merge($item, $this->generatedDroppedCoordinates());}, $this->lootBox->generatingLoot());
-    }
-
-    protected function generatedDroppedCoordinates(){
-        return [
-            "x" => rand($this->coordinates["x"] - $this->radius, $this->coordinates["x"] + $this->radius),
-            "y" => rand($this->coordinates["y"] - $this->radius, $this->coordinates["y"] + $this->radius),
-        ];
+        foreach ($this->lootBox->generatingLoot() as $lootItem) {
+             $loot[] = [
+                 "item" => $lootItem["item"],
+                 "x" => $this->coordinates["x"],
+                 "y" => $this->coordinates["y"],
+                 "radius" => $this->radius,
+                 "quantity" =>$lootItem["quantity"]];
+        }
+        return $loot;
     }
 
     public function getHp(): int{

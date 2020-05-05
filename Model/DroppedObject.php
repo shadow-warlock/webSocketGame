@@ -5,10 +5,12 @@ namespace WebSocketGame\Model;
 
 class DroppedObject extends GameObject{
     private $quantity;
+    private $maxQuantity;
 
-    public function __construct($name, $x, $y, $radius, $quantity){
+    public function __construct($name, $x, $y, $radius, $maxQuantity, $quantity){
         parent::__construct($name, $x, $y, $radius);
         $this->quantity=$quantity;
+        $this->maxQuantity=$maxQuantity;
     }
 
     public function jsonSerialize() {
@@ -21,9 +23,11 @@ class DroppedObject extends GameObject{
         $this->quantity = $quantity;
     }
 
-    /**
-     * @return mixed
-     */
+    public function getMaxQuantity()
+    {
+        return $this->maxQuantity;
+    }
+
     public function getQuantity() {
         return $this->quantity;
     }

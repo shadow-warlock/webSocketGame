@@ -8,6 +8,7 @@ use WebSocketGame\Model\DroppedObject;
 use WebSocketGame\Model\Loot\LootBox;
 use WebSocketGame\Model\Loot\LootItem;
 use WebSocketGame\Model\TakingDamageObject;
+use WebSocketGame\Utilities;
 
 class ObjectFactory {
 
@@ -34,7 +35,8 @@ class ObjectFactory {
         $config = json_decode($json, true);
         foreach($config as $objName => $data){
             $this->droppedObjects[$objName] = [
-                'radius' => $data['radius']
+                'radius' => $data['radius'],
+                'maxQuantity' => $data['maxQuantity'],
             ];
         }
     }
@@ -47,10 +49,19 @@ class ObjectFactory {
         return null;
     }
 
-    public function createDropped($name, $x, $y, $quantity){
+    public function createDropped($name, $x, $y, $radius, $quantity){
         if(isset($this->droppedObjects[$name])){
             $data = $this->droppedObjects[$name];
-            return new DroppedObject($name, $x, $y, $data['radius'], $quantity);
+            $maxQuantity = $data['maxQuantity']/10;
+            while ($quantity > $maxQuantity){
+                $coordinates = Utilities::generatedDroppedCoordinates($x, $y, $radius);
+                $objects[] = new DroppedObject($name, $coordinates["x"], $coordinates["y"],$data['radius'], $data['maxQuantity'], $maxQuantity);
+                $quantity = $quantity-$maxQuantity;
+            }
+            if ($quantity > 0){
+                $objects[] = new DroppedObject($name, $x, $y, $data['radius'], $data['maxQuantity'], $quantity);
+            }
+            return $objects;
         }
         return null;
     }
