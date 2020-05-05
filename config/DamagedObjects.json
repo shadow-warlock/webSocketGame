@@ -2,9 +2,13 @@
   "Stone":{
     "radius": 50,
     "hp": 200,
-    "givesExp": 10,
+    "givesExp": 20,
     "lootBox":{
       "stone":{
+        "chance": 1,
+        "quantities": [1, 10]
+      },
+      "gold":{
         "chance": 1,
         "quantities": [1, 10]
       }
@@ -13,7 +17,7 @@
   "Wood":{
     "radius": 50,
     "hp": 200,
-    "givesExp": 10,
+    "givesExp": 20,
     "lootBox":{
       "wood":{
         "chance": 1,

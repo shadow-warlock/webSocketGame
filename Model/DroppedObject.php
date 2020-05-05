@@ -13,13 +13,22 @@ class DroppedObject extends GameObject{
 
     public function jsonSerialize() {
         return array_merge(parent::jsonSerialize(),[
-            "quantity" => $this->quantity,]);
+            "quantity" => $this->quantity]);
     }
 
     public function setQuantity($quantity): void
     {
         $this->quantity = $quantity;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getQuantity() {
+        return $this->quantity;
+    }
+
+
 
 
 }

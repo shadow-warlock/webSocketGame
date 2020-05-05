@@ -2,7 +2,9 @@
 
 namespace WebSocketGame\Model\Inventory;
 
-class InventoryItem
+use JsonSerializable;
+
+class InventoryItem implements JsonSerializable
 {
     private $name;
     private $quantity;
@@ -16,6 +18,20 @@ class InventoryItem
     public function jsonSerialize() {
         return $this->getItem();
     }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function getQuantity() {
+        return $this->quantity;
+    }
+
+    public function addQuantity($added) {
+        $this->quantity += $added;
+    }
+
+
 
     public function getItem()
     {

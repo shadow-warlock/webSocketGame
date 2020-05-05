@@ -45,8 +45,8 @@ class  User {
         ctx.beginPath();
         ctx.strokeStyle = "red";
         ctx.lineWidth = 10;
-        ctx.moveTo(this.coordinates.x - 25, this.coordinates.y - 30);
-        ctx.lineTo(this.coordinates.x - 25 + (50/this.maxHp*this.hp), this.coordinates.y - 30);
+        ctx.moveTo(this.coordinates.x - this.radius, this.coordinates.y - this.radius*1.5);
+        ctx.lineTo(this.coordinates.x - this.radius + (50/this.maxHp*this.hp), this.coordinates.y - this.radius*1.5);
         ctx.stroke();
 
     }

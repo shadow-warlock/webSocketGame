@@ -4,6 +4,7 @@ namespace WebSocketGame;
 
 use JsonSerializable;
 use WebSocketGame\Factory\ObjectFactory;
+use WebSocketGame\Model\DroppedObject;
 use WebSocketGame\Model\GameObject;
 use WebSocketGame\Model\Loot\LootItem;
 use WebSocketGame\Model\TakingDamageObject;
@@ -68,7 +69,7 @@ class World implements JsonSerializable{
                         foreach ($attacked->droppingLoot() as $droppedItem){
                             $this->addDroppedObject($droppedItem["item"], $droppedItem["x"], $droppedItem["y"], $droppedItem["quantity"]);
                         }
-                        $this->removeUser($attacked);
+//                        $this->removeUser($attacked);
                     }
                     return;
                 }
@@ -93,8 +94,8 @@ class World implements JsonSerializable{
         }
     }
 
-    public function takeObject(User $taking, LootItem $taked){
-         $taking->takingObject($taked->generatingLoot()["name"], $taked->generatingLoot()["quantity"]);
+    public function takeObject(User $taking, DroppedObject $taked){
+         $taking->takingObject($taked->getName(), $taked->getQuantity());
          $this->removeDroppedObject($taked);
     }
 
@@ -103,7 +104,7 @@ class World implements JsonSerializable{
     }
 
     public function removeUser($user){
-        unset($this->users[$user]);
+        unset($this->users[array_search($user, $this->users)]);
         $this->users = array_values($this->users);
     }
 

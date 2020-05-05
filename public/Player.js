@@ -35,6 +35,18 @@ class  Player extends User{
         ctx.fill();
     }
 
+    drawInventory(ctx, time) {
+        let w = ctx.canvas.clientWidth/2;
+        let h = w;
+        for(let i = 0; i < this.inventory.length; i++){
+            let x = i % 2 ? 0 : w;
+            let y = i / 2 * h;
+            ctx.drawImage(makeImage(this.inventory[i].name), x, y, w, h);
+            ctx.fillText(this.inventory[i].quantity, x, y);
+        }
+
+    }
+
     drawTop(ctx, time) {
         ctx.font = "15px Arial";
         ctx.fillStyle = "black";

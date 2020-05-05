@@ -23,8 +23,8 @@ class User extends TakingDamageObject{
     public function __construct($connection, $login, $x, $y){
         $lootBox = new LootBox();
         $lootBox->addItem(new LootItem("gold", 0.9, [3,30]));
-        $inventory = new Inventory();
-        parent::__construct("User", $x, $y,20, 100, new LootBox(), 100);
+        parent::__construct("User", $x, $y,20, 100, $lootBox, 100);
+        $this->inventory = new Inventory();
         $this->connection=$connection;
         $this->login=$login;
         $this->meleeRadius=50;
@@ -87,9 +87,6 @@ class User extends TakingDamageObject{
     }
     public function getConnection(){
         return $this->connection;
-    }
-    public function getColor(): array{
-        return $this->color;
     }
     public function getExp(): int{
         return $this->exp;

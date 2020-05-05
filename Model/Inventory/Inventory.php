@@ -2,7 +2,9 @@
 
 namespace WebSocketGame\Model\Inventory;
 
-class Inventory
+use JsonSerializable;
+
+class Inventory implements JsonSerializable
 {
     private $items = [];
 
@@ -18,8 +20,8 @@ class Inventory
 
     public function checkNewItem(InventoryItem $newItem): bool {
         foreach ($this->items as $item) {
-            if ($item["name"] == $newItem["name"]){
-                $item["quantity"] = $item["quantity"] + $newItem["uantity"];
+            if ($item->getName() == $newItem->getName()){
+                $item->addQuantity($newItem->getQuantity());
                 return false;
             }
         }

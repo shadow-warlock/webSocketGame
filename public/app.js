@@ -4,6 +4,7 @@ let objects = [];
 let player = null;
 let canvas;
 let topCanvas;
+let inventoryCanvas;
 let time = 0;
 
 function draw() {
@@ -27,6 +28,12 @@ function drawTop() {
     let topCtx = topCanvas.getContext('2d');
     topCtx.clearRect(0, 0, canvas.width, canvas.height);
     player.drawTop(topCtx, time);
+}
+
+function drawInventory() {
+    let inventoryCtx = inventoryCanvas.getContext('2d');
+    inventoryCtx.clearRect(0, 0, canvas.width, canvas.height);
+    player.drawInventory(inventoryCtx, time);
 }
 
 function onPlayerCreate() {

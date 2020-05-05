@@ -1,11 +1,11 @@
 {
   "stone":{
-    "radius": 10
+    "radius": 20
   },
   "wood":{
-    "radius": 10
+    "radius": 20
   },
   "gold":{
-    "radius": 10
+    "radius": 20
   }
 }

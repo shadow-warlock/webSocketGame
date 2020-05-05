@@ -3,6 +3,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/autoload.php';
 
 use WebSocketGame\Model\User;
+use WebSocketGame\Validator\BaseValidator;
 use WebSocketGame\World;
 use Workerman\Timer;
 use Workerman\Worker;
@@ -22,16 +23,18 @@ $ws_worker->onWorkerStart = function () use (&$world) {
 
 $ws_worker->onMessage = function ($connection, $data) use (&$world) {
     $data = json_decode($data, true);
+    $user = $world->findUserByConnection($connection);
+    if(BaseValidator::validateUser($user)){
+        return;
+    }
     if ($data["type"]==="move") {
         $horizontal = $data["data"]["horizontal"] * 3;
         $vertical = $data["data"]["vertical"] * 3;
-        $user = $world->findUserByConnection($connection);
         $world->moveUser($user, $horizontal, $vertical);
         return;
     }
     if($data["type"] === "melee") {
-        $attacking = $world->findUserByConnection($connection);
-        $world->melee($attacking, $data["data"]["x"], $data["data"]["y"]);
+        $world->melee($user, $data["data"]["x"], $data["data"]["y"]);
     }
 };
 
@@ -43,7 +46,7 @@ $ws_worker->onConnect = function ($connection) use (&$world) {
 
 $ws_worker->onClose = function ($connection) use (&$world) {
     // удаляем параметр при отключении пользователя
-    $user = array_search($connection, array_map(function(User $user){return $user->getConnection();}, $world->getUsers()));
+    $user = $world->findUserByConnection($connection);
     $world->removeUser($user);
 };
 
